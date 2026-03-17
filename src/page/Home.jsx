@@ -8,56 +8,94 @@ import {
 function PopupForm({ onClose }) {
   const [form, setForm] = useState({ name: '', phone: '', location: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth < 600);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, []);
+
   const submit = (e) => { e.preventDefault(); setSent(true); setTimeout(onClose, 2400); };
+
+  const inp = { width:'100%', padding:'8px 11px', border:'1.5px solid #e0e7f0', borderRadius:8, fontSize:13, fontFamily:'inherit', color:'#1a1a2e', background:'#fafbff', outline:'none', boxSizing:'border-box' };
+  const lbl = { display:'block', fontSize:10, fontWeight:700, color:'#666', marginBottom:4, letterSpacing:'0.6px', textTransform:'uppercase' };
+
   return (
-    <div className="popup-overlay">
-      <div className="popup-box">
-        <div className="popup-header">
-          <button className="popup-close" onClick={onClose}>×</button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
-            <div className="popup-icon-wrap"><Snowflake size={22} color="#fff" /></div>
+    <div onClick={(e)=>{ if(e.target===e.currentTarget) onClose(); }} style={{
+      position:'fixed', inset:0, zIndex:9999,
+      background:'rgba(26,58,92,0.65)', backdropFilter:'blur(6px)',
+      display:'flex', alignItems:'center', justifyContent:'center',
+      padding: isMobile ? '12px' : '16px',
+      overflowY:'auto',
+    }}>
+      <div style={{
+        background:'#fff',
+        borderRadius: 18,
+        width:'100%', maxWidth: isMobile ? '100%' : 440,
+        maxHeight: '90vh',
+        overflowY:'auto', overflowX:'hidden',
+        boxShadow:'0 32px 80px rgba(26,58,92,0.25)',
+        margin:'auto',
+      }}>
+
+        {/* no drag handle - centered layout */}
+
+        {/* Header */}
+        <div style={{ background:'linear-gradient(135deg,#1a3a5c,#1565c0)', padding: isMobile ? '12px 16px 12px' : '16px 18px 14px', position:'relative' }}>
+          <button onClick={onClose} style={{ position:'absolute', top:10, right:10, background:'rgba(255,255,255,0.18)', border:'none', color:'#fff', width:28, height:28, borderRadius:'50%', cursor:'pointer', fontSize:16, display:'flex', alignItems:'center', justifyContent:'center' }}>×</button>
+          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom: isMobile ? 8 : 10 }}>
+            <div style={{ background:'rgba(255,255,255,0.2)', borderRadius:8, padding:'6px', display:'flex', flexShrink:0 }}>
+              <Snowflake size={16} color="#fff" />
+            </div>
             <div>
-              <h2 className="popup-title">Book a Freezer Box</h2>
-              <p className="popup-sub">Delivered in 30–60 mins anywhere in Greater Noida</p>
+              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize: isMobile ? 15 : 17, fontWeight:700, color:'#fff', margin:0, lineHeight:1.2 }}>Book a Freezer Box</h2>
+              <p style={{ fontSize:11, color:'rgba(255,255,255,0.72)', margin:'2px 0 0' }}>30–60 min delivery · Greater Noida</p>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {['✅ 24/7 Service', '❄️ Medical Grade', '⚡ Fast Delivery'].map(t => (
-              <span key={t} className="popup-badge">{t}</span>
+          <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
+            {['✅ 24/7','❄️ Medical Grade','⚡ Fast'].map(t=>(
+              <span key={t} style={{ background:'rgba(255,255,255,0.15)', color:'rgba(255,255,255,0.9)', fontSize:10, padding:'2px 8px', borderRadius:20, fontWeight:600, border:'1px solid rgba(255,255,255,0.2)' }}>{t}</span>
             ))}
           </div>
         </div>
-        <div className="popup-body">
+
+        {/* Body */}
+        <div style={{ padding: isMobile ? '14px 16px 24px' : '18px 20px 24px' }}>
           {sent ? (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ fontSize: 54, marginBottom: 12 }}>✅</div>
-              <h3 style={{ fontFamily: "'Fraunces', serif", fontSize: 22, color: '#1a3a5c', marginBottom: 8 }}>Request Received!</h3>
-              <p style={{ color: '#666', fontSize: 15 }}>Our team will contact you shortly with care and compassion.</p>
+            <div style={{ textAlign:'center', padding:'16px 0' }}>
+              <div style={{ fontSize:44, marginBottom:10 }}>✅</div>
+              <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:18, color:'#1a3a5c', marginBottom:6 }}>Request Received!</h3>
+              <p style={{ color:'#666', fontSize:13 }}>Our team will contact you shortly.</p>
             </div>
           ) : (
             <form onSubmit={submit}>
-              {[
-                { label: 'Full Name *', key: 'name', type: 'text', ph: 'Your full name', req: true },
-                { label: 'Phone Number *', key: 'phone', type: 'tel', ph: '+91 XXXXX XXXXX', req: true },
-                { label: 'Area / Sector', key: 'location', type: 'text', ph: 'Sector, Greater Noida', req: false },
-              ].map(f => (
-                <div key={f.key} className="field-wrap">
-                  <label className="field-label">{f.label}</label>
-                  <input required={f.req} type={f.type} value={form[f.key]}
-                    onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                    placeholder={f.ph} className="field-input" />
+              {/* Name + Phone in a row on larger, stacked on small */}
+              <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'0 12px' }}>
+                <div style={{ marginBottom:9 }}>
+                  <label style={lbl}>Full Name *</label>
+                  <input required type="text" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" style={inp} />
                 </div>
-              ))}
-              <div className="field-wrap">
-                <label className="field-label">Message</label>
-                <textarea rows={3} value={form.message}
-                  onChange={e => setForm({ ...form, message: e.target.value })}
-                  placeholder="Any special requirements..." className="field-input" style={{ resize: 'none' }} />
+                <div style={{ marginBottom:9 }}>
+                  <label style={lbl}>Phone *</label>
+                  <input required type="tel" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="+91 XXXXX XXXXX" style={inp} />
+                </div>
               </div>
-              <button type="submit" className="btn-red" style={{ width: '100%', marginTop: 4 }}>📲 Submit Request</button>
-              <p style={{ textAlign: 'center', fontSize: 12, color: '#999', marginTop: 12 }}>
-                Or call directly:{' '}
-                <a href="tel:+919217535757" style={{ color: '#1565c0', fontWeight: 700 }}>+91 9217535757</a>
+              <div style={{ marginBottom:9 }}>
+                <label style={lbl}>Area / Sector</label>
+                <input type="text" value={form.location} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Sector, Greater Noida" style={inp} />
+              </div>
+              <div style={{ marginBottom:12 }}>
+                <label style={lbl}>Message</label>
+                <textarea rows={isMobile ? 2 : 3} value={form.message} onChange={e=>setForm({...form,message:e.target.value})}
+                  placeholder="Any special requirements..."
+                  style={{ ...inp, resize:'none' }} />
+              </div>
+              <button type="submit" style={{ width:'100%', background:'linear-gradient(135deg,#c0392b,#e74c3c)', color:'#fff', border:'none', borderRadius:10, padding:'11px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+                📲 Submit Request
+              </button>
+              <p style={{ textAlign:'center', fontSize:11, color:'#aaa', marginTop:10 }}>
+                Or call: <a href="tel:+919217535757" style={{ color:'#1565c0', fontWeight:700 }}>+91 9217535757</a>
               </p>
             </form>
           )}
@@ -81,6 +119,15 @@ export default function LastCare() {
     window.addEventListener('scroll', onScroll);
     return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
   }, []);
+
+  useEffect(() => {
+    if (showPopup) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showPopup]);
 
   const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false); };
   const handleContact = (e) => { e.preventDefault(); alert('Thank you! We will contact you shortly.'); setContactForm({ name: '', phone: '', email: '', location: '', message: '' }); };
@@ -139,15 +186,17 @@ export default function LastCare() {
         .anim-up   { animation: slideUp .8s ease both; }
 
         /* ── POPUP ── */
-        .popup-overlay { position:fixed;inset:0;z-index:9999;background:rgba(26,58,92,0.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .3s ease; }
-        .popup-box { background:#fff;border-radius:24px;width:100%;max-width:460px;overflow:hidden;animation:scaleIn .4s ease;box-shadow:0 40px 100px rgba(26,58,92,0.25); }
-        .popup-header { background:linear-gradient(135deg,#1a3a5c 0%,#1565c0 100%);padding:26px 26px 22px;position:relative; }
-        .popup-close { position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center; }
-        .popup-icon-wrap { background:rgba(255,255,255,0.2);border-radius:12px;padding:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-        .popup-title { font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:#fff;margin:0; }
-        .popup-sub   { font-size:13px;color:rgba(255,255,255,0.75);margin:3px 0 0;font-weight:500; }
-        .popup-badge { background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:11px;padding:4px 11px;border-radius:20px;font-weight:600;border:1px solid rgba(255,255,255,0.2); }
-        .popup-body  { padding:24px 26px 28px; }
+        .popup-overlay { position:fixed;inset:0;z-index:9999;background:rgba(26,58,92,0.6);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:0;animation:fadeIn .3s ease; }
+        @media(min-width:600px){ .popup-overlay { align-items:center;padding:16px; } }
+        .popup-box { background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:100%;max-height:92vh;overflow-y:auto;overflow-x:hidden;animation:slideUp .35s ease;box-shadow:0 -8px 40px rgba(26,58,92,0.22); }
+        @media(min-width:600px){ .popup-box { border-radius:20px;max-width:460px;animation:scaleIn .4s ease;box-shadow:0 40px 100px rgba(26,58,92,0.25); } }
+        .popup-header { background:linear-gradient(135deg,#1a3a5c 0%,#1565c0 100%);padding:18px 18px 16px;position:relative; }
+        .popup-close { position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.18);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center; }
+        .popup-icon-wrap { background:rgba(255,255,255,0.2);border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+        .popup-title { font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:#fff;margin:0; }
+        .popup-sub   { font-size:12px;color:rgba(255,255,255,0.75);margin:2px 0 0;font-weight:500; }
+        .popup-badge { background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;border:1px solid rgba(255,255,255,0.2); }
+        .popup-body  { padding:18px 18px 28px; }
 
         /* ── FIELDS ── */
         .field-wrap  { margin-bottom:14px; }
@@ -234,6 +283,8 @@ export default function LastCare() {
         .service-detail-desc  { font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:24px; }
         .service-chips { display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px; }
         .chip { background:var(--ice);border:1px solid var(--ice2);color:var(--blue);padding:7px 16px;border-radius:30px;font-size:13px;font-weight:600; }
+        /* mobile service grid */
+        .service-grid-mobile { display:none; }
 
         /* ── WHY US ── */
         .why-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px; }
@@ -291,8 +342,9 @@ export default function LastCare() {
           .about-img-sm  { display:none; }
           .about-badge   { bottom:16px;left:16px; }
           .services-wrap { flex-direction:column; }
-          .service-tabs  { width:100%;flex-direction:row;overflow-x:auto;padding-bottom:4px; }
-          .s-tab         { min-width:150px; }
+          .service-tabs  { width:100%;flex-direction:row;overflow-x:auto;padding-bottom:4px;scrollbar-width:none; }
+          .service-tabs::-webkit-scrollbar { display:none; }
+          .s-tab         { min-width:150px;flex-shrink:0; }
           .contact-grid  { grid-template-columns:1fr; }
           .footer-grid   { grid-template-columns:1fr 1fr; }
           .hero-headline { white-space:normal; }
@@ -311,7 +363,12 @@ export default function LastCare() {
           .form-row       { grid-template-columns:1fr; }
           .footer-grid    { grid-template-columns:1fr;gap:32px; }
           .about-grid     { gap:32px; }
-          .service-detail { padding:28px 24px; }
+          .service-tabs  { display:grid;grid-template-columns:repeat(3,1fr);flex-direction:unset;overflow-x:unset;gap:8px;width:100%;padding-bottom:0; }
+          .s-tab         { min-width:unset;width:100%;flex-direction:column;align-items:center;text-align:center;padding:14px 8px;gap:6px; }
+          .s-tab-icon    { font-size:26px; }
+          .s-tab-title   { font-size:12px; }
+          .s-tab .arrow-hide { display:none; }
+          .service-detail { padding:28px 20px; }
           .contact-form-card { padding:28px 24px; }
           .hero-btns      { flex-direction:column;align-items:flex-start; }
           .hero-trust     { gap:14px; }
@@ -331,11 +388,11 @@ export default function LastCare() {
           .stats-inner    { grid-template-columns:1fr 1fr; }
           .stat-cell      { padding:22px 12px; }
           .marquee-item   { padding:0 20px;font-size:12px; }
-          .service-tabs   { gap:6px; }
-          .s-tab          { min-width:130px;padding:10px 12px; }
-          .s-tab-title    { font-size:12px; }
-          .service-detail { padding:22px 18px; }
-          .service-detail-icon { font-size:40px; }
+          .service-tabs   { grid-template-columns:repeat(2,1fr);gap:6px; }
+          .s-tab          { min-width:unset;padding:12px 8px; }
+          .s-tab-title    { font-size:11px; }
+          .service-detail { padding:20px 16px; }
+          .service-detail-icon { font-size:36px; }
           .why-grid       { grid-template-columns:1fr 1fr; }
           .why-card       { padding:20px 14px; }
           .faq-q-btn      { padding:16px 16px; }
@@ -343,8 +400,7 @@ export default function LastCare() {
           .contact-form-card { padding:22px 18px; }
           .footer-wrap    { padding:44px 16px 24px; }
           .footer-grid    { gap:28px; }
-          .popup-body     { padding:20px 18px 24px; }
-          .popup-header   { padding:20px 18px 18px; }
+
           .trust-item     { font-size:12px; }
           .hero-trust     { gap:10px; }
           .section-label  { font-size:11px;padding:5px 12px; }
@@ -417,16 +473,14 @@ export default function LastCare() {
           <img src="/1.png" alt="Funeral services" />
           <div className="hero-overlay" />
         </div>
-        {[{t:'14%',l:'66%',s:64,d:'0s',o:.04},{t:'38%',l:'74%',s:100,d:'1.1s',o:.03},{t:'66%',l:'60%',s:50,d:'2s',o:.05},{t:'22%',l:'84%',s:78,d:'.7s',o:.03}].map((p,i) => (
-          <div key={i} style={{ position:'absolute', top:p.t, left:p.l, fontSize:p.s, color:`rgba(144,202,249,${p.o})`, animation:`floatY 5s ${p.d} ease-in-out infinite`, zIndex:1, pointerEvents:'none' }}>❄</div>
-        ))}
+
         <div className="hero-content">
           <div style={{ maxWidth:620 }}>
             <h1 className="hero-headline anim-up" style={{ animationDelay:'.1s' }}>
               We Stand With You <span>In Times of Grief</span>
             </h1>
             <p className="hero-sub anim-up" style={{ animationDelay:'.2s' }}>
-              Medical-grade freezer boxes delivered in <strong style={{ color:'#fff' }}>30–60 minutes</strong> across Greater Noida. Available 24/7 with transparent pricing and caring service..
+              Medical-grade dead body freezer boxes delivered in <strong style={{ color:'#fff' }}>30–60 minutes</strong> across all sectors of Greater Noida. Available 24/7 with transparent pricing and compassionate service.
             </p>
             <div className="hero-btns anim-up" style={{ animationDelay:'.3s' }}>
               <button className="btn-red" onClick={() => setShowPopup(true)} style={{ fontSize:15, padding:'14px 28px' }}>
@@ -525,7 +579,7 @@ export default function LastCare() {
                 <button key={i} className={`s-tab ${activeService===i?'active':''}`} onClick={() => setActiveService(i)}>
                   <span className="s-tab-icon">{s.icon}</span>
                   <div><div className="s-tab-title">{s.title}</div></div>
-                  {activeService===i && <ArrowRight size={14} color="#1565c0" style={{ marginLeft:'auto', flexShrink:0 }} />}
+                  {activeService===i && <ArrowRight size={14} color="#1565c0" className="arrow-hide" style={{ marginLeft:'auto', flexShrink:0 }} />}
                 </button>
               ))}
             </div>
@@ -700,7 +754,7 @@ export default function LastCare() {
         <div className="footer-grid">
           <div>
             <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:4 }}>
-             
+            
               <div>
                 <div style={{ fontFamily:"'Fraunces',serif", fontWeight:900, fontSize:26, color:'#fff', lineHeight:1 }}>LastCare</div>
                 <div style={{ fontSize:10, color:'#90caf9', fontWeight:700, letterSpacing:2.5, textTransform:'uppercase', marginTop:3 }}>Freezer Box on Rent</div>
