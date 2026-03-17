@@ -1,0 +1,736 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Phone, Mail, MapPin, Clock, Menu, X, ChevronDown,
+  Snowflake, CheckCircle, Users, Star, Shield,
+  Heart, ArrowRight, Zap
+} from 'lucide-react';
+
+function PopupForm({ onClose }) {
+  const [form, setForm] = useState({ name: '', phone: '', location: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const submit = (e) => { e.preventDefault(); setSent(true); setTimeout(onClose, 2400); };
+  return (
+    <div className="popup-overlay">
+      <div className="popup-box">
+        <div className="popup-header">
+          <button className="popup-close" onClick={onClose}>×</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+            <div className="popup-icon-wrap"><Snowflake size={22} color="#fff" /></div>
+            <div>
+              <h2 className="popup-title">Book a Freezer Box</h2>
+              <p className="popup-sub">Delivered in 30–60 mins anywhere in Greater Noida</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {['✅ 24/7 Service', '❄️ Medical Grade', '⚡ Fast Delivery'].map(t => (
+              <span key={t} className="popup-badge">{t}</span>
+            ))}
+          </div>
+        </div>
+        <div className="popup-body">
+          {sent ? (
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ fontSize: 54, marginBottom: 12 }}>✅</div>
+              <h3 style={{ fontFamily: "'Fraunces', serif", fontSize: 22, color: '#1a3a5c', marginBottom: 8 }}>Request Received!</h3>
+              <p style={{ color: '#666', fontSize: 15 }}>Our team will contact you shortly with care and compassion.</p>
+            </div>
+          ) : (
+            <form onSubmit={submit}>
+              {[
+                { label: 'Full Name *', key: 'name', type: 'text', ph: 'Your full name', req: true },
+                { label: 'Phone Number *', key: 'phone', type: 'tel', ph: '+91 XXXXX XXXXX', req: true },
+                { label: 'Area / Sector', key: 'location', type: 'text', ph: 'Sector, Greater Noida', req: false },
+              ].map(f => (
+                <div key={f.key} className="field-wrap">
+                  <label className="field-label">{f.label}</label>
+                  <input required={f.req} type={f.type} value={form[f.key]}
+                    onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                    placeholder={f.ph} className="field-input" />
+                </div>
+              ))}
+              <div className="field-wrap">
+                <label className="field-label">Message</label>
+                <textarea rows={3} value={form.message}
+                  onChange={e => setForm({ ...form, message: e.target.value })}
+                  placeholder="Any special requirements..." className="field-input" style={{ resize: 'none' }} />
+              </div>
+              <button type="submit" className="btn-red" style={{ width: '100%', marginTop: 4 }}>📲 Submit Request</button>
+              <p style={{ textAlign: 'center', fontSize: 12, color: '#999', marginTop: 12 }}>
+                Or call directly:{' '}
+                <a href="tel:+919217535757" style={{ color: '#1565c0', fontWeight: 700 }}>+91 9217535757</a>
+              </p>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function LastCare() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [activeService, setActiveService] = useState(0);
+  const [contactForm, setContactForm] = useState({ name: '', phone: '', email: '', location: '', message: '' });
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowPopup(true), 3500);
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
+  }, []);
+
+  const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false); };
+  const handleContact = (e) => { e.preventDefault(); alert('Thank you! We will contact you shortly.'); setContactForm({ name: '', phone: '', email: '', location: '', message: '' }); };
+
+  const services = [
+    { icon: '❄️', title: 'Freezer Box on Rent', desc: 'Medical-grade dead body freezer boxes maintaining 0°C to –5°C. Quick delivery and professional setup anywhere in Greater Noida within 30–60 minutes of booking.', features: ['0°C to –5°C controlled temperature', 'Hygienic & certified equipment', '24 to 72 hrs body preservation'] },
+    { icon: '🚨', title: '24/7 Emergency Support', desc: 'Round-the-clock emergency response team ready to assist you. We understand urgency — our team is always just one call away, every hour of every day.', features: ['Immediate phone response', 'Night & public holiday service', 'Dedicated support personnel'] },
+    { icon: '🚐', title: 'Dead Body Transportation', desc: 'Safe and dignified dead body transportation within Greater Noida and to other cities. All vehicles are properly equipped and staff are professionally trained.', features: ['Intercity transport available', 'Proper refrigerated vehicles', 'Trained & respectful staff'] },
+    { icon: '🚑', title: 'Ambulance Services', desc: 'Fully equipped ambulances for hospital-to-home transfer, home pickup, and emergency situations — handled with the utmost level of care and professionalism.', features: ['Hospital to home transfer', 'Emergency response capability', 'All areas of Greater Noida covered'] },
+    { icon: '🕉️', title: 'Funeral Arrangements', desc: 'Complete funeral and cremation coordination — from pandit arrangements and cremation ground booking to full ceremony management for your loved ones.', features: ['Pandit & priest coordination', 'Cremation ground booking', 'Full ceremony management'] },
+    { icon: '📋', title: 'Documentation Support', desc: 'End-to-end assistance with death certificates, legal formalities, and all required paperwork so your family can focus on what truly matters.', features: ['Death certificate processing', 'Legal documentation help', 'Step-by-step guidance'] },
+  ];
+
+  const faqs = [
+    { q: 'What is a dead body freezer box and why is it needed?', a: 'A dead body freezer box preserves the body at a controlled low temperature, preventing decomposition. It is needed when the last rites are delayed due to family travel, legal formalities, or religious reasons.' },
+    { q: 'Do you provide freezer box services on rent in Greater Noida?', a: 'Yes, we provide dead body freezer box rental services across all sectors of Greater Noida 24/7, with quick delivery and professional handling by our trained team.' },
+    { q: 'How fast can the freezer box be delivered after booking?', a: 'We understand the urgency in such situations. Our team can deliver and install the freezer box within 30–60 minutes anywhere in Greater Noida after confirmation.' },
+    { q: 'What temperature does the freezer box maintain?', a: 'Our freezer boxes maintain a temperature between 0°C to –5°C, ensuring safe and hygienic preservation of the body for extended hours or days.' },
+    { q: 'How long can the body be preserved in the freezer box?', a: 'Depending on environmental conditions, the body can be preserved for 24 to 72 hours, allowing families sufficient time to complete all necessary arrangements.' },
+    { q: 'What are the rental charges?', a: 'Our charges are affordable and fully transparent — based on duration and location with no hidden fees. Please contact us for exact pricing details.' },
+  ];
+
+  const navLinks = ['Home', 'About', 'Services', 'Contact'];
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Instrument Sans', sans-serif; background: #fff; color: #1a1a2e; overflow-x: hidden; }
+
+        :root {
+          --blue:   #1a3a5c;
+          --blue2:  #1565c0;
+          --ice:    #e8f4fd;
+          --ice2:   #bbdefb;
+          --red:    #c0392b;
+          --red2:   #e74c3c;
+          --text:   #1a1a2e;
+          --muted:  #6b7280;
+          --border: #e5e7eb;
+          --shadow: 0 4px 24px rgba(26,58,92,0.10);
+          --shadow-lg: 0 16px 60px rgba(26,58,92,0.15);
+        }
+
+        @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.94)} to{opacity:1;transform:scale(1)} }
+        @keyframes floatY  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @keyframes pulse   { 0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)} 60%{box-shadow:0 0 0 12px rgba(192,57,43,0)} }
+        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+        .anim-fade { animation: fadeIn .7s ease both; }
+        .anim-up   { animation: slideUp .8s ease both; }
+
+        /* ── POPUP ── */
+        .popup-overlay { position:fixed;inset:0;z-index:9999;background:rgba(26,58,92,0.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .3s ease; }
+        .popup-box { background:#fff;border-radius:24px;width:100%;max-width:460px;overflow:hidden;animation:scaleIn .4s ease;box-shadow:0 40px 100px rgba(26,58,92,0.25); }
+        .popup-header { background:linear-gradient(135deg,#1a3a5c 0%,#1565c0 100%);padding:26px 26px 22px;position:relative; }
+        .popup-close { position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center; }
+        .popup-icon-wrap { background:rgba(255,255,255,0.2);border-radius:12px;padding:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+        .popup-title { font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:#fff;margin:0; }
+        .popup-sub   { font-size:13px;color:rgba(255,255,255,0.75);margin:3px 0 0;font-weight:500; }
+        .popup-badge { background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:11px;padding:4px 11px;border-radius:20px;font-weight:600;border:1px solid rgba(255,255,255,0.2); }
+        .popup-body  { padding:24px 26px 28px; }
+
+        /* ── FIELDS ── */
+        .field-wrap  { margin-bottom:14px; }
+        .field-label { display:block;font-size:11px;font-weight:700;color:#555;margin-bottom:6px;letter-spacing:0.7px;text-transform:uppercase; }
+        .field-input { width:100%;padding:11px 14px;border:1.5px solid #e0e7f0;border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);background:#fafbff;outline:none;transition:border-color .2s,box-shadow .2s; }
+        .field-input:focus { border-color:var(--blue2);box-shadow:0 0 0 3px rgba(21,101,192,0.10); }
+
+        /* ── BUTTONS ── */
+        .btn-red { background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;border:none;border-radius:12px;padding:14px 32px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;letter-spacing:0.2px;transition:transform .2s,box-shadow .2s;animation:pulse 2.5s ease-in-out infinite;display:inline-flex;align-items:center;gap:8px; }
+        .btn-red:hover { transform:translateY(-2px);box-shadow:0 10px 28px rgba(192,57,43,0.38); }
+        .btn-blue { background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:none;border-radius:12px;padding:14px 32px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px; }
+        .btn-blue:hover { transform:translateY(-2px);box-shadow:0 10px 28px rgba(26,58,92,0.30); }
+        .btn-outline-blue { background:transparent;border:2px solid var(--blue);color:var(--blue);border-radius:12px;padding:13px 28px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:all .25s;display:inline-flex;align-items:center;gap:8px;text-decoration:none; }
+        .btn-outline-blue:hover { background:var(--blue);color:#fff; }
+        .btn-outline-white { background:transparent;border:2px solid rgba(255,255,255,0.55);color:#fff;border-radius:12px;padding:14px 28px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit;transition:all .25s;display:inline-flex;align-items:center;gap:8px;text-decoration:none; }
+        .btn-outline-white:hover { background:rgba(255,255,255,0.12);border-color:#fff; }
+
+        /* ── NAVBAR — ALWAYS WHITE ── */
+        .navbar { position:fixed;top:0;width:100%;z-index:1000;transition:all .3s;padding:0 24px;height:72px;display:flex;align-items:center;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);box-shadow:0 2px 24px rgba(26,58,92,0.09);border-bottom:1px solid #edf2f7; }
+        .navbar.scrolled { box-shadow:0 4px 32px rgba(26,58,92,0.13); }
+        .navbar-inner { max-width:1280px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between; }
+        .nav-link { background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:6px 0;position:relative;color:#444;transition:color .2s;letter-spacing:0.2px; }
+        .nav-link::after { content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--blue2);border-radius:2px;transition:width .3s; }
+        .nav-link:hover { color:var(--blue2) !important; }
+        .nav-link:hover::after { width:100%; }
+        .nav-phone { display:flex;align-items:center;gap:8px;color:var(--blue);text-decoration:none;font-weight:700;font-size:14px;padding:8px 16px;border:1.5px solid rgba(26,58,92,0.25);border-radius:10px;transition:all .2s; }
+        .nav-phone:hover { background:var(--ice);border-color:var(--blue); }
+
+        /* ── SECTION LABEL ── */
+        .section-label { display:inline-flex;align-items:center;gap:8px;background:var(--ice);border:1px solid var(--ice2);color:var(--blue);padding:6px 16px;border-radius:30px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:18px; }
+
+        /* ── HERO ── */
+        .hero-section { min-height:100vh;position:relative;display:flex;align-items:center;overflow:hidden; }
+        .hero-bg { position:absolute;inset:0; }
+        .hero-bg img { width:100%;height:100%;object-fit:cover;object-position:center; }
+        .hero-overlay { position:absolute;inset:0;background:linear-gradient(110deg,rgba(10,30,60,0.90) 0%,rgba(10,30,60,0.75) 50%,rgba(10,30,60,0.45) 100%); }
+        .hero-content { position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:clamp(100px,12vw,140px) 24px 60px;width:100%; }
+        .hero-headline { font-family:'Fraunces',serif;font-size:clamp(20px,4vw,54px);font-weight:900;line-height:1.1;color:#fff;margin-bottom:18px;white-space:nowrap; }
+        .hero-headline span { color:#90caf9;font-style:italic; }
+        .hero-sub { font-size:clamp(14px,1.6vw,17px);color:rgba(255,255,255,0.78);line-height:1.75;max-width:500px;margin-bottom:36px; }
+        .hero-btns { display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px; }
+        .hero-trust { display:flex;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(255,255,255,0.15); }
+        .trust-item { display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.72);font-size:13px;font-weight:600; }
+
+        /* ── STATS ── */
+        .stats-bar { background:var(--blue);padding:0 24px; }
+        .stats-inner { max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr); }
+        .stat-cell { padding:32px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.12); }
+        .stat-cell:last-child { border-right:none; }
+        .stat-num { font-family:'Fraunces',serif;font-size:clamp(28px,3.5vw,48px);font-weight:900;color:#fff;line-height:1; }
+        .stat-lbl { font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;margin-top:6px; }
+
+        /* ── MARQUEE ── */
+        .marquee-wrap { background:var(--ice);border-top:1px solid var(--ice2);border-bottom:1px solid var(--ice2);padding:14px 0;overflow:hidden; }
+        .marquee-track { display:flex;width:max-content;animation:marquee 18s linear infinite; }
+        .marquee-item { padding:0 32px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;border-right:1px solid var(--ice2); }
+
+        /* ── ABOUT ── */
+        .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center; }
+        .about-imgs { position:relative; }
+        .about-img-main { width:100%;height:460px;object-fit:cover;border-radius:24px;display:block;box-shadow:var(--shadow-lg); }
+        .about-badge { position:absolute;bottom:-24px;left:24px;background:var(--blue);color:#fff;border-radius:18px;padding:18px 24px;box-shadow:var(--shadow-lg); }
+        .about-badge-num { font-family:'Fraunces',serif;font-size:38px;font-weight:900;line-height:1; }
+        .about-badge-lbl { font-size:12px;color:rgba(255,255,255,0.7);font-weight:600;margin-top:4px; }
+        .about-img-sm { position:absolute;top:24px;right:-24px;width:140px;height:140px;object-fit:cover;border-radius:16px;border:4px solid #fff;box-shadow:var(--shadow-lg);display:block; }
+        .about-title { font-family:'Fraunces',serif;font-size:clamp(26px,3.5vw,48px);font-weight:900;line-height:1.12;color:var(--text);margin-bottom:20px; }
+        .about-title span { color:var(--blue2); }
+        .about-body { font-size:16px;color:var(--muted);line-height:1.82;margin-bottom:18px; }
+        .check-list { display:flex;flex-direction:column;gap:12px;margin-bottom:32px; }
+        .check-item { display:flex;align-items:center;gap:12px;font-size:15px;color:#374151;font-weight:500; }
+
+        /* ── SERVICES ── */
+        .services-wrap { display:flex;gap:32px;align-items:flex-start; }
+        .service-tabs { display:flex;flex-direction:column;gap:8px;width:260px;flex-shrink:0; }
+        .s-tab { cursor:pointer;padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);background:#fff;font-family:inherit;text-align:left;width:100%;transition:all .25s;display:flex;align-items:center;gap:12px; }
+        .s-tab.active { background:var(--ice);border-color:var(--blue2); }
+        .s-tab:hover  { background:var(--ice);border-color:rgba(21,101,192,0.3); }
+        .s-tab-icon   { font-size:22px;flex-shrink:0; }
+        .s-tab-title  { font-size:14px;font-weight:700;color:var(--text);line-height:1.3; }
+        .s-tab.active .s-tab-title { color:var(--blue2); }
+        .service-detail { flex:1;background:#fff;border:1.5px solid var(--border);border-radius:24px;padding:44px 48px;min-height:320px;box-shadow:var(--shadow); }
+        .service-detail-icon  { font-size:52px;margin-bottom:20px; }
+        .service-detail-title { font-family:'Fraunces',serif;font-size:clamp(22px,2.5vw,34px);font-weight:800;color:var(--text);margin-bottom:14px; }
+        .service-detail-desc  { font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:24px; }
+        .service-chips { display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px; }
+        .chip { background:var(--ice);border:1px solid var(--ice2);color:var(--blue);padding:7px 16px;border-radius:30px;font-size:13px;font-weight:600; }
+
+        /* ── WHY US ── */
+        .why-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px; }
+        .why-card { background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:28px 20px;text-align:center;transition:all .3s; }
+        .why-card:hover { border-color:var(--blue2);transform:translateY(-5px);box-shadow:var(--shadow); }
+        .why-icon  { font-size:36px;margin-bottom:14px; }
+        .why-title { font-weight:700;color:var(--text);font-size:15px;margin-bottom:6px; }
+        .why-desc  { color:var(--muted);font-size:13px; }
+
+        /* ── CONTACT ── */
+        .contact-grid { display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start; }
+        .contact-info-card  { background:var(--blue);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-lg); }
+        .contact-info-img   { width:100%;height:240px;object-fit:cover;display:block; }
+        .contact-info-body  { padding:28px 28px 32px; }
+        .contact-info-title { font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:20px; }
+        .contact-row      { display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);text-decoration:none; }
+        .contact-row:last-child { border-bottom:none; }
+        .contact-row-icon { width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+        .contact-row-main { color:#fff;font-weight:600;font-size:14px;word-break:break-all; }
+        .contact-row-sub  { color:rgba(255,255,255,0.5);font-size:12px;margin-top:2px; }
+        .contact-form-card  { background:#fff;border:1.5px solid var(--border);border-radius:24px;padding:40px 40px 44px;box-shadow:var(--shadow); }
+        .contact-form-title { font-family:'Fraunces',serif;font-size:26px;font-weight:800;color:var(--text);margin-bottom:28px; }
+        .form-row { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+
+        /* ── FAQ ── */
+        .faq-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+        .faq-card { background:#fff;border:1.5px solid var(--border);border-radius:16px;overflow:hidden; }
+        .faq-q-btn { width:100%;background:none;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:flex-start;justify-content:space-between;padding:20px 22px;gap:14px;text-align:left; }
+        .faq-q-btn:hover { background:var(--ice); }
+        .faq-q-text  { font-size:15px;font-weight:700;color:var(--text);flex:1;line-height:1.5; }
+        .faq-answer  { padding:14px 22px 18px;font-size:14px;color:var(--muted);line-height:1.75;border-top:1px solid var(--border); }
+
+        /* ── MAP ── */
+        .map-frame { border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg);border:3px solid #fff; }
+
+        /* ── FOOTER ── */
+        .footer-wrap { background:var(--blue);color:#fff;padding:64px 24px 28px; }
+        .footer-grid { max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:48px;margin-bottom:48px; }
+        .footer-brand-desc { color:rgba(255,255,255,0.6);font-size:14px;line-height:1.75;max-width:340px;margin-top:16px; }
+        .footer-heading { font-weight:800;font-size:15px;margin-bottom:18px;color:#fff; }
+        .footer-link { background:none;border:none;color:rgba(255,255,255,0.6);font-family:inherit;font-size:14px;cursor:pointer;padding:0;margin-bottom:10px;display:block;transition:color .2s;text-align:left; }
+        .footer-link:hover { color:#fff; }
+        .footer-contact-row { display:flex;gap:10px;align-items:flex-start;margin-bottom:14px; }
+        .footer-contact-txt { color:rgba(255,255,255,0.65);font-size:14px;text-decoration:none; }
+        .footer-contact-txt:hover { color:#fff; }
+        .footer-divider { max-width:1280px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.12);padding-top:24px;text-align:center;color:rgba(255,255,255,0.38);font-size:13px; }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+        ══════════════════════════════════════ */
+
+        /* Tablet landscape — 1024px */
+        @media(max-width:1024px){
+          .about-grid    { grid-template-columns:1fr;gap:48px; }
+          .about-img-sm  { display:none; }
+          .about-badge   { bottom:16px;left:16px; }
+          .services-wrap { flex-direction:column; }
+          .service-tabs  { width:100%;flex-direction:row;overflow-x:auto;padding-bottom:4px; }
+          .s-tab         { min-width:150px; }
+          .contact-grid  { grid-template-columns:1fr; }
+          .footer-grid   { grid-template-columns:1fr 1fr; }
+          .hero-headline { white-space:normal; }
+        }
+
+        /* Tablet portrait — 768px */
+        @media(max-width:768px){
+          .nav-desktop    { display:none !important; }
+          .nav-mobile-btn { display:flex !important; }
+          .stats-inner    { grid-template-columns:1fr 1fr; }
+          .stat-cell      { border-right:none;border-bottom:1px solid rgba(255,255,255,0.12); }
+          .stat-cell:nth-child(odd)  { border-right:1px solid rgba(255,255,255,0.12); }
+          .stat-cell:last-child,
+          .stat-cell:nth-last-child(2):nth-child(odd) { border-bottom:none; }
+          .faq-grid       { grid-template-columns:1fr; }
+          .form-row       { grid-template-columns:1fr; }
+          .footer-grid    { grid-template-columns:1fr;gap:32px; }
+          .about-grid     { gap:32px; }
+          .service-detail { padding:28px 24px; }
+          .contact-form-card { padding:28px 24px; }
+          .hero-btns      { flex-direction:column;align-items:flex-start; }
+          .hero-trust     { gap:14px; }
+          .hero-headline  { white-space:normal;font-size:clamp(22px,6vw,42px); }
+          .hero-sub       { font-size:15px; }
+          .about-img-main { height:320px; }
+          .contact-info-img { height:200px; }
+          .why-grid       { grid-template-columns:repeat(2,1fr); }
+        }
+
+        /* Mobile — 480px */
+        @media(max-width:480px){
+          .hero-content   { padding:88px 16px 48px; }
+          .hero-headline  { font-size:clamp(20px,7vw,34px); }
+          .hero-btns      { gap:10px; }
+          .btn-red, .btn-blue, .btn-outline-white { padding:12px 22px;font-size:14px; }
+          .stats-inner    { grid-template-columns:1fr 1fr; }
+          .stat-cell      { padding:22px 12px; }
+          .marquee-item   { padding:0 20px;font-size:12px; }
+          .service-tabs   { gap:6px; }
+          .s-tab          { min-width:130px;padding:10px 12px; }
+          .s-tab-title    { font-size:12px; }
+          .service-detail { padding:22px 18px; }
+          .service-detail-icon { font-size:40px; }
+          .why-grid       { grid-template-columns:1fr 1fr; }
+          .why-card       { padding:20px 14px; }
+          .faq-q-btn      { padding:16px 16px; }
+          .faq-q-text     { font-size:14px; }
+          .contact-form-card { padding:22px 18px; }
+          .footer-wrap    { padding:44px 16px 24px; }
+          .footer-grid    { gap:28px; }
+          .popup-body     { padding:20px 18px 24px; }
+          .popup-header   { padding:20px 18px 18px; }
+          .trust-item     { font-size:12px; }
+          .hero-trust     { gap:10px; }
+          .section-label  { font-size:11px;padding:5px 12px; }
+        }
+
+        /* Small mobile — 360px */
+        @media(max-width:360px){
+          .hero-headline  { font-size:20px; }
+          .why-grid       { grid-template-columns:1fr; }
+          .s-tab          { min-width:120px; }
+        }
+      `}</style>
+
+      {showPopup && <PopupForm onClose={() => setShowPopup(false)} />}
+
+      {/* ══ NAVBAR ══ */}
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <div className="navbar-inner">
+          <div style={{ cursor:'pointer', display:'flex', alignItems:'center' }} onClick={() => scrollTo('home')}>
+            <img src="/logo2.png" alt="LastCare" style={{ height:52, width:'auto', objectFit:'contain', display:'block' }}
+              onError={e => { e.currentTarget.style.display='none'; document.getElementById('logo-fallback').style.display='flex'; }} />
+            <div id="logo-fallback" style={{ display:'none', alignItems:'center', gap:10 }}>
+              <div style={{ background:'linear-gradient(135deg,#1a3a5c,#1565c0)', borderRadius:11, padding:'9px 10px' }}>
+                <Snowflake size={20} color="#fff" />
+              </div>
+              <div>
+                <div style={{ fontFamily:"'Fraunces',serif", fontWeight:900, fontSize:19, color:'#1a3a5c', lineHeight:1 }}>LastCare</div>
+                <div style={{ fontSize:9, color:'#1565c0', fontWeight:700, letterSpacing:2, textTransform:'uppercase' }}>Freezer Box on Rent</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="nav-desktop" style={{ display:'flex', alignItems:'center', gap:36 }}>
+            {navLinks.map(n => <button key={n} className="nav-link" onClick={() => scrollTo(n.toLowerCase())}>{n}</button>)}
+          </div>
+          <div className="nav-desktop" style={{ display:'flex', alignItems:'center', gap:12 }}>
+            <a href="tel:+919217535757" className="nav-phone"><Phone size={15} /> +91 9217535757</a>
+            <button onClick={() => setShowPopup(true)} style={{ background:'linear-gradient(135deg,#c0392b,#e74c3c)', color:'#fff', border:'none', borderRadius:10, padding:'10px 22px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit' }}>Book Now</button>
+          </div>
+
+          <button className="nav-mobile-btn" onClick={() => setMenuOpen(!menuOpen)}
+            style={{ display:'none', background:'none', border:'none', cursor:'pointer', color:'#1a3a5c', padding:8, alignItems:'center' }}>
+            {menuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
+
+        {menuOpen && (
+          <div style={{ background:'#fff', borderTop:'1px solid #edf2f7', padding:'18px 24px 24px' }}>
+            {navLinks.map(n => (
+              <button key={n} onClick={() => scrollTo(n.toLowerCase())}
+                style={{ display:'block', width:'100%', textAlign:'left', background:'none', border:'none', fontFamily:'inherit', fontSize:16, fontWeight:600, color:'#333', padding:'13px 0', borderBottom:'1px solid #f3f4f6', cursor:'pointer' }}>
+                {n}
+              </button>
+            ))}
+            <div style={{ display:'flex', gap:12, marginTop:18, flexWrap:'wrap' }}>
+              <a href="tel:+919217535757" className="btn-outline-blue" style={{ flex:1, justifyContent:'center', fontSize:14, padding:'12px 16px' }}>
+                <Phone size={15} /> Call
+              </a>
+              <button className="btn-red" onClick={() => { setShowPopup(true); setMenuOpen(false); }} style={{ flex:1, justifyContent:'center', animation:'none', fontSize:14, padding:'12px 16px' }}>
+                Book Now
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* ══ HERO ══ */}
+      <section id="home" className="hero-section">
+        <div className="hero-bg">
+          <img src="/1.png" alt="Funeral services" />
+          <div className="hero-overlay" />
+        </div>
+        {[{t:'14%',l:'66%',s:64,d:'0s',o:.04},{t:'38%',l:'74%',s:100,d:'1.1s',o:.03},{t:'66%',l:'60%',s:50,d:'2s',o:.05},{t:'22%',l:'84%',s:78,d:'.7s',o:.03}].map((p,i) => (
+          <div key={i} style={{ position:'absolute', top:p.t, left:p.l, fontSize:p.s, color:`rgba(144,202,249,${p.o})`, animation:`floatY 5s ${p.d} ease-in-out infinite`, zIndex:1, pointerEvents:'none' }}>❄</div>
+        ))}
+        <div className="hero-content">
+          <div style={{ maxWidth:620 }}>
+            <h1 className="hero-headline anim-up" style={{ animationDelay:'.1s' }}>
+              We Stand With You <span>In Times of Grief</span>
+            </h1>
+            <p className="hero-sub anim-up" style={{ animationDelay:'.2s' }}>
+              Medical-grade freezer boxes delivered in <strong style={{ color:'#fff' }}>30–60 minutes</strong> across Greater Noida. Available 24/7 with transparent pricing and caring service..
+            </p>
+            <div className="hero-btns anim-up" style={{ animationDelay:'.3s' }}>
+              <button className="btn-red" onClick={() => setShowPopup(true)} style={{ fontSize:15, padding:'14px 28px' }}>
+                📲 Book Freezer Box <ArrowRight size={16} />
+              </button>
+              <a href="tel:+919217535757" className="btn-outline-white" style={{ fontSize:15, padding:'14px 24px' }}>
+                <Phone size={16} /> +91 9217535757
+              </a>
+            </div>
+            <div className="hero-trust anim-up" style={{ animationDelay:'.4s' }}>
+              {[['⚡','30–60 Min Delivery'],['❄️','Medical Grade Box'],['💰','No Hidden Charges'],['🏆','1000+ Families']].map(([ic,tx]) => (
+                <div key={tx} className="trust-item"><span style={{ fontSize:16 }}>{ic}</span>{tx}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={{ position:'absolute', bottom:28, left:'50%', transform:'translateX(-50%)', zIndex:3, display:'flex', flexDirection:'column', alignItems:'center', gap:6, opacity:0.5 }}>
+          <div style={{ width:1, height:36, background:'linear-gradient(to bottom,transparent,#fff)' }} />
+          <ChevronDown size={18} color="#fff" />
+        </div>
+      </section>
+
+      {/* ══ MARQUEE ══ */}
+      <div className="marquee-wrap">
+        <div className="marquee-track">
+          {[...Array(2)].map((_,rep) =>
+            ['❄️ Dead Body Freezer Box on Rent','🚨 24/7 Emergency Support','🚐 Dead Body Transportation','🚑 Ambulance Services','🕉️ Funeral Arrangements','📋 Documentation Support'].map((item,i) => (
+              <span key={`${rep}-${i}`} className="marquee-item">{item}</span>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* ══ STATS ══ */}
+      <div className="stats-bar">
+        <div className="stats-inner">
+          {[
+            {n:'1000+',l:'Families Served',ic:<Users size={22} color="rgba(255,255,255,0.5)"/>},
+            {n:'24/7',l:'Always Available',ic:<Clock size={22} color="rgba(255,255,255,0.5)"/>},
+            {n:'30 Min',l:'Avg. Delivery Time',ic:<Zap size={22} color="rgba(255,255,255,0.5)"/>},
+            {n:'100%',l:'Client Satisfaction',ic:<Star size={22} color="rgba(255,255,255,0.5)"/>},
+          ].map((s,i) => (
+            <div key={i} className="stat-cell">
+              <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>{s.ic}</div>
+              <div className="stat-num">{s.n}</div>
+              <div className="stat-lbl">{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ══ ABOUT ══ */}
+      <section id="about" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#fff' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div className="about-grid">
+            <div className="about-imgs">
+              <img src="https://i.pinimg.com/736x/79/82/03/7982033729bec6631c8f54dc96a1c12a.jpg" alt="Professional team" className="about-img-main" />
+              <div className="about-badge">
+                <div className="about-badge-num">10+</div>
+                <div className="about-badge-lbl">Years of Trusted Service</div>
+              </div>
+              <img src="https://i.pinimg.com/736x/ad/7b/aa/ad7baab8cec8552796fda0dec9a87232.jpg" alt="Care" className="about-img-sm" />
+            </div>
+            <div>
+              <div className="section-label"><Heart size={13} /> About Us</div>
+              <h2 className="about-title">Compassionate Care<br /><span>When It Matters Most</span></h2>
+              <p className="about-body">With over a decade of experience, we specialise in dead body freezer box rental services along with ambulance support and dignified transportation — helping families navigate their most difficult moments with ease and peace of mind.</p>
+              <p className="about-body">Our team is committed to the highest standards of care, hygiene, and respect, ensuring the body is preserved safely while providing compassionate support to grieving families across all of Greater Noida.</p>
+              <div className="check-list">
+                {['Licensed and certified professionals','Compassionate and experienced team','Transparent pricing with no hidden costs','Complete documentation assistance'].map(t => (
+                  <div key={t} className="check-item"><CheckCircle size={18} color="#2e7d32" style={{ flexShrink:0 }} /><span>{t}</span></div>
+                ))}
+              </div>
+              <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
+                <button className="btn-blue" onClick={() => setShowPopup(true)}>Book Freezer Box <ArrowRight size={16} /></button>
+                <a href="tel:+919217535757" className="btn-outline-blue"><Phone size={16} /> Call Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SERVICES ══ */}
+      <section id="services" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#f7faff' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:60 }}>
+            <div className="section-label" style={{ justifyContent:'center' }}>❄️ Our Services</div>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(28px,4.5vw,52px)', fontWeight:900, color:'#1a1a2e', lineHeight:1.12 }}>
+              Complete <span style={{ color:'#1565c0' }}>Support Services</span>
+            </h2>
+            <p style={{ color:'#6b7280', fontSize:16, marginTop:12, maxWidth:440, margin:'12px auto 0' }}>Everything your family needs — available with one call</p>
+          </div>
+          <div className="services-wrap">
+            <div className="service-tabs">
+              {services.map((s,i) => (
+                <button key={i} className={`s-tab ${activeService===i?'active':''}`} onClick={() => setActiveService(i)}>
+                  <span className="s-tab-icon">{s.icon}</span>
+                  <div><div className="s-tab-title">{s.title}</div></div>
+                  {activeService===i && <ArrowRight size={14} color="#1565c0" style={{ marginLeft:'auto', flexShrink:0 }} />}
+                </button>
+              ))}
+            </div>
+            <div className="service-detail">
+              <div className="service-detail-icon">{services[activeService].icon}</div>
+              <h3 className="service-detail-title">{services[activeService].title}</h3>
+              <p className="service-detail-desc">{services[activeService].desc}</p>
+              <div className="service-chips">
+                {services[activeService].features.map(f => <span key={f} className="chip">✓ {f}</span>)}
+              </div>
+              <button className="btn-blue" onClick={() => setShowPopup(true)} style={{ animation:'none' }}>
+                Book This Service <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ WHY US ══ */}
+      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#fff' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:52 }}>
+            <div className="section-label" style={{ justifyContent:'center' }}><Shield size={13} /> Why Choose Us</div>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
+              Our Work <span style={{ color:'#1565c0' }}>Speaks for Itself</span>
+            </h2>
+          </div>
+          <div className="why-grid">
+            {[
+              {ic:'⚡',t:'30–60 Min Delivery',d:'Fastest response time in Greater Noida'},
+              {ic:'❄️',t:'Medical Grade Box',d:'0°C to –5°C certified & hygienic'},
+              {ic:'💰',t:'Fair & Transparent',d:'Zero hidden charges, always'},
+              {ic:'🤝',t:'Caring Team',d:'Trained, compassionate professionals'},
+              {ic:'📍',t:'Pan-Greater Noida',d:'Every sector fully covered'},
+              {ic:'📋',t:'Documentation Help',d:'Legal formalities made easy'},
+            ].map((w,i) => (
+              <div key={i} className="why-card">
+                <div className="why-icon">{w.ic}</div>
+                <div className="why-title">{w.t}</div>
+                <div className="why-desc">{w.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ CONTACT ══ */}
+      <section id="contact" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#f7faff' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:60 }}>
+            <div className="section-label" style={{ justifyContent:'center' }}><Phone size={13} /> Get In Touch</div>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(28px,4.5vw,52px)', fontWeight:900, color:'#1a1a2e', lineHeight:1.12 }}>
+              Contact <span style={{ color:'#1565c0' }}>Us Today</span>
+            </h2>
+            <p style={{ color:'#6b7280', fontSize:16, marginTop:12 }}>Our compassionate team is available 24/7 to assist you</p>
+          </div>
+          <div className="contact-grid">
+            <div className="contact-info-card">
+              <img src="/img.jpeg" alt="Support team" className="contact-info-img" />
+              <div className="contact-info-body">
+                <h3 className="contact-info-title">Quick Contact</h3>
+                {[
+                  {ic:<Phone size={17} color="#90caf9"/>, label:'+91 9217535757', sub:'24/7 Helpline', href:'tel:+919217535757'},
+                  {ic:<Mail size={17} color="#ce93d8"/>, label:'info@lastcarefreezerbox.in', sub:'Email us anytime', href:'mailto:info@lastcarefreezerbox.in'},
+                  {ic:<MapPin size={17} color="#80cbc4"/>, label:'HCPQ+R42 Amrapali Icon Leisure Valley Gr Noida, UP 201318', sub:'Coverage area', href:null},
+                  {ic:<Clock size={17} color="#a5d6a7"/>, label:'24 / 7 Available', sub:'Always here for you', href:null},
+                ].map((c,i) => (
+                  <a key={i} className="contact-row" href={c.href||'#'} style={{ textDecoration:'none' }}>
+                    <div className="contact-row-icon">{c.ic}</div>
+                    <div>
+                      <div className="contact-row-main">{c.label}</div>
+                      <div className="contact-row-sub">{c.sub}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div className="contact-form-card">
+              <h3 className="contact-form-title">Send Us a Message</h3>
+              <form onSubmit={handleContact}>
+                <div className="field-wrap">
+                  <label className="field-label">Full Name *</label>
+                  <input required type="text" value={contactForm.name} onChange={e=>setContactForm({...contactForm,name:e.target.value})} placeholder="Your name" className="field-input" />
+                </div>
+                <div className="form-row">
+                  <div className="field-wrap">
+                    <label className="field-label">Phone *</label>
+                    <input required type="tel" value={contactForm.phone} onChange={e=>setContactForm({...contactForm,phone:e.target.value})} placeholder="+91" className="field-input" />
+                  </div>
+                  <div className="field-wrap">
+                    <label className="field-label">Email</label>
+                    <input type="email" value={contactForm.email} onChange={e=>setContactForm({...contactForm,email:e.target.value})} placeholder="email@example.com" className="field-input" />
+                  </div>
+                </div>
+                <div className="field-wrap">
+                  <label className="field-label">Location</label>
+                  <input type="text" value={contactForm.location} onChange={e=>setContactForm({...contactForm,location:e.target.value})} placeholder="Sector, Greater Noida" className="field-input" />
+                </div>
+                <div className="field-wrap">
+                  <label className="field-label">Message</label>
+                  <textarea rows={4} value={contactForm.message} onChange={e=>setContactForm({...contactForm,message:e.target.value})} placeholder="How can we help you?" className="field-input" style={{ resize:'none' }} />
+                </div>
+                <button type="submit" className="btn-red" style={{ width:'100%', justifyContent:'center', animation:'none', fontSize:15 }}>
+                  Send Message →
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ MAP ══ */}
+      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#fff' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:44 }}>
+            <div className="section-label" style={{ justifyContent:'center' }}><MapPin size={13} /> Coverage Area</div>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
+              Serving <span style={{ color:'#1565c0' }}>All of Greater Noida</span>
+            </h2>
+            <p style={{ color:'#6b7280', fontSize:15, marginTop:10 }}>Full coverage across Greater Noida, Greater Greater Noida & Greater Noida Extension</p>
+          </div>
+          <div className="map-frame">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.426386472271!2d77.43527887495509!3d28.586982736148723!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceff569c53fdb%3A0x709db43c2508a7f8!2sIcon%20Leisure%20Valley!5e0!3m2!1sen!2sin!4v1773754999392!5m2!1sen!2sin"
+              width="100%" height="420" style={{ border:0, display:'block' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          </div>
+          <div style={{ marginTop:32, textAlign:'center' }}>
+            <div style={{ display:'inline-flex', flexWrap:'wrap', gap:20, alignItems:'center', background:'linear-gradient(135deg,#1a3a5c,#1565c0)', color:'#fff', padding:'18px 32px', borderRadius:18, boxShadow:'0 8px 30px rgba(26,58,92,0.28)' }}>
+              <Phone size={20} />
+              <div style={{ textAlign:'left' }}>
+                <div style={{ fontSize:11, opacity:0.75 }}>Need Immediate Service?</div>
+                <a href="tel:+919217535757" style={{ color:'#fff', textDecoration:'none', fontWeight:800, fontSize:20 }}>+91 9217535757</a>
+              </div>
+              <span style={{ fontSize:14, fontWeight:600, opacity:0.85 }}>We reach you in 30–60 minutes</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ FAQ ══ */}
+      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#f7faff' }}>
+        <div style={{ maxWidth:1100, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:52 }}>
+            <div className="section-label" style={{ justifyContent:'center' }}>❓ FAQs</div>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
+              Frequently Asked <span style={{ color:'#1565c0' }}>Questions</span>
+            </h2>
+          </div>
+          <div className="faq-grid">
+            {faqs.map((f,i) => (
+              <div key={i} className="faq-card">
+                <button className="faq-q-btn" onClick={() => setOpenFaq(openFaq===i?null:i)}>
+                  <span className="faq-q-text">{f.q}</span>
+                  <ChevronDown size={19} color="#1565c0" style={{ flexShrink:0, transform:openFaq===i?'rotate(180deg)':'none', transition:'transform .3s' }} />
+                </button>
+                {openFaq===i && <div className="faq-answer">{f.a}</div>}
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop:52, textAlign:'center', background:'#fff', padding:'clamp(24px,5vw,44px)', borderRadius:24, border:'1.5px solid #e0e7ff', boxShadow:'0 4px 24px rgba(26,58,92,0.07)' }}>
+            <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:24, fontWeight:800, color:'#1a1a2e', marginBottom:8 }}>Still Have Questions?</h3>
+            <p style={{ color:'#6b7280', fontSize:15, marginBottom:24 }}>We're available 24/7 — call us or send a message anytime</p>
+            <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
+              <a href="tel:+919217535757" className="btn-red" style={{ textDecoration:'none', animation:'none' }}><Phone size={16} /> Call Now</a>
+              <button className="btn-outline-blue" onClick={() => scrollTo('contact')}>Contact Us</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ FOOTER ══ */}
+      <footer className="footer-wrap">
+        <div className="footer-grid">
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:4 }}>
+             
+              <div>
+                <div style={{ fontFamily:"'Fraunces',serif", fontWeight:900, fontSize:26, color:'#fff', lineHeight:1 }}>LastCare</div>
+                <div style={{ fontSize:10, color:'#90caf9', fontWeight:700, letterSpacing:2.5, textTransform:'uppercase', marginTop:3 }}>Freezer Box on Rent</div>
+              </div>
+            </div>
+            <p className="footer-brand-desc">24/7 medical-grade freezer box rental and funeral support services across every sector of Greater Noida — handled with dignity, compassion, and professionalism.</p>
+          </div>
+          <div>
+            <div className="footer-heading">Quick Links</div>
+            {navLinks.map(n => <button key={n} className="footer-link" onClick={() => scrollTo(n.toLowerCase())}>{n}</button>)}
+          </div>
+          <div>
+            <div className="footer-heading">Contact</div>
+            {[
+              {ic:<Phone size={15}/>, content:<a href="tel:+919217535757" className="footer-contact-txt">+91 9217535757</a>, sub:'24/7 Helpline'},
+              {ic:<Mail size={15}/>, content:<a href="mailto:info@lastcarefreezerbox.in" className="footer-contact-txt" style={{ fontSize:12 }}>info@lastcarefreezerbox.in</a>, sub:''},
+              {ic:<MapPin size={15}/>, content:<span className="footer-contact-txt">HCPQ+R42 Amrapali Icon Leisure Valley Greater Noida, UP 201318</span>, sub:''},
+            ].map((c,i) => (
+              <div key={i} className="footer-contact-row">
+                <span style={{ color:'rgba(255,255,255,0.5)', marginTop:2, flexShrink:0 }}>{c.ic}</span>
+                <div>
+                  {c.content}
+                  {c.sub && <div style={{ fontSize:11, color:'rgba(255,255,255,0.35)', marginTop:2 }}>{c.sub}</div>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="footer-divider">© 2026 LastCare Freezer Box on Rent. All rights reserved. | Greater Noida, Uttar Pradesh</div>
+      </footer>
+    </>
+  );
+}
