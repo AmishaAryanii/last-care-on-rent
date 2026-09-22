@@ -1,101 +1,307 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  Phone, Mail, MapPin, Clock, Menu, X, ChevronDown,
-  Snowflake, CheckCircle, Users, Star, Shield,
-  Heart, ArrowRight, Zap
-} from 'lucide-react';
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Menu,
+  X,
+  ChevronDown,
+  Snowflake,
+  CheckCircle,
+  Users,
+  Star,
+  Shield,
+  Heart,
+  ArrowRight,
+  Zap,
+} from "lucide-react";
 
 function PopupForm({ onClose }) {
-  const [form, setForm] = useState({ name: '', phone: '', location: '', message: '' });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    location: "",
+    message: "",
+  });
   const [sent, setSent] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
   useEffect(() => {
     const h = () => setIsMobile(window.innerWidth < 600);
-    window.addEventListener('resize', h);
-    return () => window.removeEventListener('resize', h);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
   }, []);
 
-  const submit = (e) => { e.preventDefault(); setSent(true); setTimeout(onClose, 2400); };
+  const submit = (e) => {
+    e.preventDefault();
+    setSent(true);
+    setTimeout(onClose, 2400);
+  };
 
-  const inp = { width:'100%', padding:'8px 11px', border:'1.5px solid #e0e7f0', borderRadius:8, fontSize:13, fontFamily:'inherit', color:'#1a1a2e', background:'#fafbff', outline:'none', boxSizing:'border-box' };
-  const lbl = { display:'block', fontSize:10, fontWeight:700, color:'#666', marginBottom:4, letterSpacing:'0.6px', textTransform:'uppercase' };
+  const inp = {
+    width: "100%",
+    padding: "8px 11px",
+    border: "1.5px solid #e0e7f0",
+    borderRadius: 8,
+    fontSize: 13,
+    fontFamily: "inherit",
+    color: "#1a1a2e",
+    background: "#fafbff",
+    outline: "none",
+    boxSizing: "border-box",
+  };
+  const lbl = {
+    display: "block",
+    fontSize: 10,
+    fontWeight: 700,
+    color: "#666",
+    marginBottom: 4,
+    letterSpacing: "0.6px",
+    textTransform: "uppercase",
+  };
 
   return (
-    <div onClick={(e)=>{ if(e.target===e.currentTarget) onClose(); }} style={{
-      position:'fixed', inset:0, zIndex:9999,
-      background:'rgba(26,58,92,0.65)', backdropFilter:'blur(6px)',
-      display:'flex', alignItems:'center', justifyContent:'center',
-      padding: isMobile ? '12px' : '16px',
-      overflowY:'auto',
-    }}>
-      <div style={{
-        background:'#fff',
-        borderRadius: 18,
-        width:'100%', maxWidth: isMobile ? '100%' : 440,
-        maxHeight: '90vh',
-        overflowY:'auto', overflowX:'hidden',
-        boxShadow:'0 32px 80px rgba(26,58,92,0.25)',
-        margin:'auto',
-      }}>
-
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "rgba(26,58,92,0.65)",
+        backdropFilter: "blur(6px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: isMobile ? "12px" : "16px",
+        overflowY: "auto",
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 18,
+          width: "100%",
+          maxWidth: isMobile ? "100%" : 440,
+          maxHeight: "90vh",
+          overflowY: "auto",
+          overflowX: "hidden",
+          boxShadow: "0 32px 80px rgba(26,58,92,0.25)",
+          margin: "auto",
+        }}
+      >
         {/* no drag handle - centered layout */}
 
         {/* Header */}
-        <div style={{ background:'linear-gradient(135deg,#1a3a5c,#1565c0)', padding: isMobile ? '12px 16px 12px' : '16px 18px 14px', position:'relative' }}>
-          <button onClick={onClose} style={{ position:'absolute', top:10, right:10, background:'rgba(255,255,255,0.18)', border:'none', color:'#fff', width:28, height:28, borderRadius:'50%', cursor:'pointer', fontSize:16, display:'flex', alignItems:'center', justifyContent:'center' }}>×</button>
-          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom: isMobile ? 8 : 10 }}>
-            <div style={{ background:'rgba(255,255,255,0.2)', borderRadius:8, padding:'6px', display:'flex', flexShrink:0 }}>
+        <div
+          style={{
+            background: "linear-gradient(135deg,#1a3a5c,#1565c0)",
+            padding: isMobile ? "12px 16px 12px" : "16px 18px 14px",
+            position: "relative",
+          }}
+        >
+          <button
+            onClick={onClose}
+            style={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              background: "rgba(255,255,255,0.18)",
+              border: "none",
+              color: "#fff",
+              width: 28,
+              height: 28,
+              borderRadius: "50%",
+              cursor: "pointer",
+              fontSize: 16,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ×
+          </button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: isMobile ? 8 : 10,
+            }}
+          >
+            <div
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                borderRadius: 8,
+                padding: "6px",
+                display: "flex",
+                flexShrink: 0,
+              }}
+            >
               <Snowflake size={16} color="#fff" />
             </div>
             <div>
-              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize: isMobile ? 15 : 17, fontWeight:700, color:'#fff', margin:0, lineHeight:1.2 }}>Book a Freezer Box</h2>
-              <p style={{ fontSize:11, color:'rgba(255,255,255,0.72)', margin:'2px 0 0' }}>30–60 min delivery · Greater Noida</p>
+              <h2
+                style={{
+                  fontFamily: "'Fraunces',serif",
+                  fontSize: isMobile ? 15 : 17,
+                  fontWeight: 700,
+                  color: "#fff",
+                  margin: 0,
+                  lineHeight: 1.2,
+                }}
+              >
+                Book a Freezer Box
+              </h2>
+              <p
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.72)",
+                  margin: "2px 0 0",
+                }}
+              >
+                30–60 min delivery · Greater Noida
+              </p>
             </div>
           </div>
-          <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
-            {['✅ 24/7','❄️ Medical Grade','⚡ Fast'].map(t=>(
-              <span key={t} style={{ background:'rgba(255,255,255,0.15)', color:'rgba(255,255,255,0.9)', fontSize:10, padding:'2px 8px', borderRadius:20, fontWeight:600, border:'1px solid rgba(255,255,255,0.2)' }}>{t}</span>
+          <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+            {["✅ 24/7", "❄️ Medical Grade", "⚡ Fast"].map((t) => (
+              <span
+                key={t}
+                style={{
+                  background: "rgba(255,255,255,0.15)",
+                  color: "rgba(255,255,255,0.9)",
+                  fontSize: 10,
+                  padding: "2px 8px",
+                  borderRadius: 20,
+                  fontWeight: 600,
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                {t}
+              </span>
             ))}
           </div>
         </div>
 
         {/* Body */}
-        <div style={{ padding: isMobile ? '14px 16px 24px' : '18px 20px 24px' }}>
+        <div
+          style={{ padding: isMobile ? "14px 16px 24px" : "18px 20px 24px" }}
+        >
           {sent ? (
-            <div style={{ textAlign:'center', padding:'16px 0' }}>
-              <div style={{ fontSize:44, marginBottom:10 }}>✅</div>
-              <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:18, color:'#1a3a5c', marginBottom:6 }}>Request Received!</h3>
-              <p style={{ color:'#666', fontSize:13 }}>Our team will contact you shortly.</p>
+            <div style={{ textAlign: "center", padding: "16px 0" }}>
+              <div style={{ fontSize: 44, marginBottom: 10 }}>✅</div>
+              <h3
+                style={{
+                  fontFamily: "'Fraunces',serif",
+                  fontSize: 18,
+                  color: "#1a3a5c",
+                  marginBottom: 6,
+                }}
+              >
+                Request Received!
+              </h3>
+              <p style={{ color: "#666", fontSize: 13 }}>
+                Our team will contact you shortly.
+              </p>
             </div>
           ) : (
             <form onSubmit={submit}>
               {/* Name + Phone in a row on larger, stacked on small */}
-              <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'0 12px' }}>
-                <div style={{ marginBottom:9 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                  gap: "0 12px",
+                }}
+              >
+                <div style={{ marginBottom: 9 }}>
                   <label style={lbl}>Full Name *</label>
-                  <input required type="text" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" style={inp} />
+                  <input
+                    required
+                    type="text"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder="Your name"
+                    style={inp}
+                  />
                 </div>
-                <div style={{ marginBottom:9 }}>
+                <div style={{ marginBottom: 9 }}>
                   <label style={lbl}>Phone *</label>
-                  <input required type="tel" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="+91 XXXXX XXXXX" style={inp} />
+                  <input
+                    required
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) =>
+                      setForm({ ...form, phone: e.target.value })
+                    }
+                    placeholder="+91 XXXXX XXXXX"
+                    style={inp}
+                  />
                 </div>
               </div>
-              <div style={{ marginBottom:9 }}>
+              <div style={{ marginBottom: 9 }}>
                 <label style={lbl}>Area / Sector</label>
-                <input type="text" value={form.location} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Sector, Greater Noida" style={inp} />
+                <input
+                  type="text"
+                  value={form.location}
+                  onChange={(e) =>
+                    setForm({ ...form, location: e.target.value })
+                  }
+                  placeholder="Sector, Greater Noida"
+                  style={inp}
+                />
               </div>
-              <div style={{ marginBottom:12 }}>
+              <div style={{ marginBottom: 12 }}>
                 <label style={lbl}>Message</label>
-                <textarea rows={isMobile ? 2 : 3} value={form.message} onChange={e=>setForm({...form,message:e.target.value})}
+                <textarea
+                  rows={isMobile ? 2 : 3}
+                  value={form.message}
+                  onChange={(e) =>
+                    setForm({ ...form, message: e.target.value })
+                  }
                   placeholder="Any special requirements..."
-                  style={{ ...inp, resize:'none' }} />
+                  style={{ ...inp, resize: "none" }}
+                />
               </div>
-              <button type="submit" style={{ width:'100%', background:'linear-gradient(135deg,#c0392b,#e74c3c)', color:'#fff', border:'none', borderRadius:10, padding:'11px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+              <button
+                type="submit"
+                style={{
+                  width: "100%",
+                  background: "linear-gradient(135deg,#c0392b,#e74c3c)",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "11px",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
                 📲 Submit Request
               </button>
-              <p style={{ textAlign:'center', fontSize:11, color:'#aaa', marginTop:10 }}>
-                Or call: <a href="tel:+919999741394" style={{ color:'#1565c0', fontWeight:700 }}>+91 9999741394</a>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: 11,
+                  color: "#aaa",
+                  marginTop: 10,
+                }}
+              >
+                Or call:{" "}
+                <a
+                  href="tel:+919999741394"
+                  style={{ color: "#1565c0", fontWeight: 700 }}
+                >
+                  +91 9999741394
+                </a>
               </p>
             </form>
           )}
@@ -111,46 +317,152 @@ export default function LastCare() {
   const [showPopup, setShowPopup] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [activeService, setActiveService] = useState(0);
-  const [contactForm, setContactForm] = useState({ name: '', phone: '', email: '', location: '', message: '' });
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    location: "",
+    message: "",
+  });
 
   useEffect(() => {
     const t = setTimeout(() => setShowPopup(true), 3500);
     const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
-    return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
     if (showPopup) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [showPopup]);
 
-  const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false); };
-  const handleContact = (e) => { e.preventDefault(); alert('Thank you! We will contact you shortly.'); setContactForm({ name: '', phone: '', email: '', location: '', message: '' }); };
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
+  };
+  const handleContact = (e) => {
+    e.preventDefault();
+    alert("Thank you! We will contact you shortly.");
+    setContactForm({
+      name: "",
+      phone: "",
+      email: "",
+      location: "",
+      message: "",
+    });
+  };
 
   const services = [
-    { icon: '❄️', title: 'Freezer Box on Rent', desc: 'Medical-grade dead body freezer boxes maintaining 0°C to –5°C. Quick delivery and professional setup anywhere in Greater Noida within 30–60 minutes of booking.', features: ['0°C to –5°C controlled temperature', 'Hygienic & certified equipment', '24 to 72 hrs body preservation'] },
-    { icon: '🚨', title: '24/7 Emergency Support', desc: 'Round-the-clock emergency response team ready to assist you. We understand urgency — our team is always just one call away, every hour of every day.', features: ['Immediate phone response', 'Night & public holiday service', 'Dedicated support personnel'] },
-    { icon: '🚐', title: 'Dead Body Transportation', desc: 'Safe and dignified dead body transportation within Greater Noida and to other cities. All vehicles are properly equipped and staff are professionally trained.', features: ['Intercity transport available', 'Proper refrigerated vehicles', 'Trained & respectful staff'] },
-    { icon: '🚑', title: 'Ambulance Services', desc: 'Fully equipped ambulances for hospital-to-home transfer, home pickup, and emergency situations — handled with the utmost level of care and professionalism.', features: ['Hospital to home transfer', 'Emergency response capability', 'All areas of Greater Noida covered'] },
-    { icon: '🕉️', title: 'Funeral Arrangements', desc: 'Complete funeral and cremation coordination — from pandit arrangements and cremation ground booking to full ceremony management for your loved ones.', features: ['Pandit & priest coordination', 'Cremation ground booking', 'Full ceremony management'] },
-    { icon: '📋', title: 'Documentation Support', desc: 'End-to-end assistance with death certificates, legal formalities, and all required paperwork so your family can focus on what truly matters.', features: ['Death certificate processing', 'Legal documentation help', 'Step-by-step guidance'] },
+    {
+      icon: "❄️",
+      title: "Freezer Box on Rent",
+      desc: "Medical-grade dead body freezer boxes maintaining 0°C to –5°C. Quick delivery and professional setup anywhere in Greater Noida within 30–60 minutes of booking.",
+      features: [
+        "0°C to –5°C controlled temperature",
+        "Hygienic & certified equipment",
+        "24 to 72 hrs body preservation",
+      ],
+    },
+    {
+      icon: "🐾",
+      title: "Cat & Dog Funeral Services",
+      desc: "Dignified and respectful funeral services for cats and dogs. We provide compassionate support for pet cremation, transportation, and final farewell arrangements.",
+      features: [
+        "Cat & dog cremation support",
+        "Pet body transportation",
+        "Respectful & hygienic handling",
+      ],
+    },
+    {
+      icon: "🚨",
+      title: "24/7 Emergency Support",
+      desc: "Round-the-clock emergency response team ready to assist you. We understand urgency — our team is always just one call away, every hour of every day.",
+      features: [
+        "Immediate phone response",
+        "Night & public holiday service",
+        "Dedicated support personnel",
+      ],
+    },
+    {
+      icon: "🚐",
+      title: "Dead Body Transportation",
+      desc: "Safe and dignified dead body transportation within Greater Noida and to other cities. All vehicles are properly equipped and staff are professionally trained.",
+      features: [
+        "Intercity transport available",
+        "Proper refrigerated vehicles",
+        "Trained & respectful staff",
+      ],
+    },
+    {
+      icon: "🚑",
+      title: "Ambulance Services",
+      desc: "Fully equipped ambulances for hospital-to-home transfer, home pickup, and emergency situations — handled with the utmost level of care and professionalism.",
+      features: [
+        "Hospital to home transfer",
+        "Emergency response capability",
+        "All areas of Greater Noida covered",
+      ],
+    },
+    {
+      icon: "🕉️",
+      title: "Funeral Arrangements",
+      desc: "Complete funeral and cremation coordination — from pandit arrangements and cremation ground booking to full ceremony management for your loved ones.",
+      features: [
+        "Pandit & priest coordination",
+        "Cremation ground booking",
+        "Full ceremony management",
+      ],
+    },
+    {
+      icon: "📋",
+      title: "Documentation Support",
+      desc: "End-to-end assistance with death certificates, legal formalities, and all required paperwork so your family can focus on what truly matters.",
+      features: [
+        "Death certificate processing",
+        "Legal documentation help",
+        "Step-by-step guidance",
+      ],
+    },
   ];
 
   const faqs = [
-    { q: 'What is a dead body freezer box and why is it needed?', a: 'A dead body freezer box preserves the body at a controlled low temperature, preventing decomposition. It is needed when the last rites are delayed due to family travel, legal formalities, or religious reasons.' },
-    { q: 'Do you provide freezer box services on rent in Greater Noida?', a: 'Yes, we provide dead body freezer box rental services across all sectors of Greater Noida 24/7, with quick delivery and professional handling by our trained team.' },
-    { q: 'How fast can the freezer box be delivered after booking?', a: 'We understand the urgency in such situations. Our team can deliver and install the freezer box within 30–60 minutes anywhere in Greater Noida after confirmation.' },
-    { q: 'What temperature does the freezer box maintain?', a: 'Our freezer boxes maintain a temperature between 0°C to –5°C, ensuring safe and hygienic preservation of the body for extended hours or days.' },
-    { q: 'How long can the body be preserved in the freezer box?', a: 'Depending on environmental conditions, the body can be preserved for 24 to 72 hours, allowing families sufficient time to complete all necessary arrangements.' },
-    { q: 'What are the rental charges?', a: 'Our charges are affordable and fully transparent — based on duration and location with no hidden fees. Please contact us for exact pricing details.' },
+    {
+      q: "What is a dead body freezer box and why is it needed?",
+      a: "A dead body freezer box preserves the body at a controlled low temperature, preventing decomposition. It is needed when the last rites are delayed due to family travel, legal formalities, or religious reasons.",
+    },
+    {
+      q: "Do you provide freezer box services on rent in Greater Noida?",
+      a: "Yes, we provide dead body freezer box rental services across all sectors of Greater Noida 24/7, with quick delivery and professional handling by our trained team.",
+    },
+    {
+      q: "How fast can the freezer box be delivered after booking?",
+      a: "We understand the urgency in such situations. Our team can deliver and install the freezer box within 30–60 minutes anywhere in Greater Noida after confirmation.",
+    },
+    {
+      q: "What temperature does the freezer box maintain?",
+      a: "Our freezer boxes maintain a temperature between 0°C to –5°C, ensuring safe and hygienic preservation of the body for extended hours or days.",
+    },
+    {
+      q: "How long can the body be preserved in the freezer box?",
+      a: "Depending on environmental conditions, the body can be preserved for 24 to 72 hours, allowing families sufficient time to complete all necessary arrangements.",
+    },
+    {
+      q: "What are the rental charges?",
+      a: "Our charges are affordable and fully transparent — based on duration and location with no hidden fees. Please contact us for exact pricing details.",
+    },
   ];
 
-  const navLinks = ['Home', 'About', 'Services', 'Contact'];
+  const navLinks = ["Home", "About", "Services", "Contact"];
 
   return (
     <>
@@ -417,49 +729,186 @@ export default function LastCare() {
       {showPopup && <PopupForm onClose={() => setShowPopup(false)} />}
 
       {/* ══ NAVBAR ══ */}
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <div className="navbar-inner">
-          <div style={{ cursor:'pointer', display:'flex', alignItems:'center' }} onClick={() => scrollTo('home')}>
-            <img src="/logo2.png" alt="LastCare" style={{ height:52, width:'auto', objectFit:'contain', display:'block' }}
-              onError={e => { e.currentTarget.style.display='none'; document.getElementById('logo-fallback').style.display='flex'; }} />
-            <div id="logo-fallback" style={{ display:'none', alignItems:'center', gap:10 }}>
-              <div style={{ background:'linear-gradient(135deg,#1a3a5c,#1565c0)', borderRadius:11, padding:'9px 10px' }}>
+          <div
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            onClick={() => scrollTo("home")}
+          >
+            <img
+              src="/logo2.png"
+              alt="LastCare"
+              style={{
+                height: 52,
+                width: "auto",
+                objectFit: "contain",
+                display: "block",
+              }}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                document.getElementById("logo-fallback").style.display = "flex";
+              }}
+            />
+            <div
+              id="logo-fallback"
+              style={{ display: "none", alignItems: "center", gap: 10 }}
+            >
+              <div
+                style={{
+                  background: "linear-gradient(135deg,#1a3a5c,#1565c0)",
+                  borderRadius: 11,
+                  padding: "9px 10px",
+                }}
+              >
                 <Snowflake size={20} color="#fff" />
               </div>
               <div>
-                <div style={{ fontFamily:"'Fraunces',serif", fontWeight:900, fontSize:19, color:'#1a3a5c', lineHeight:1 }}>LastCare</div>
-                <div style={{ fontSize:9, color:'#1565c0', fontWeight:700, letterSpacing:2, textTransform:'uppercase' }}>Freezer Box on Rent</div>
+                <div
+                  style={{
+                    fontFamily: "'Fraunces',serif",
+                    fontWeight: 900,
+                    fontSize: 19,
+                    color: "#1a3a5c",
+                    lineHeight: 1,
+                  }}
+                >
+                  LastCare
+                </div>
+                <div
+                  style={{
+                    fontSize: 9,
+                    color: "#1565c0",
+                    fontWeight: 700,
+                    letterSpacing: 2,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Freezer Box on Rent
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="nav-desktop" style={{ display:'flex', alignItems:'center', gap:36 }}>
-            {navLinks.map(n => <button key={n} className="nav-link" onClick={() => scrollTo(n.toLowerCase())}>{n}</button>)}
+          <div
+            className="nav-desktop"
+            style={{ display: "flex", alignItems: "center", gap: 36 }}
+          >
+            {navLinks.map((n) => (
+              <button
+                key={n}
+                className="nav-link"
+                onClick={() => scrollTo(n.toLowerCase())}
+              >
+                {n}
+              </button>
+            ))}
           </div>
-          <div className="nav-desktop" style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <a href="tel:+919999741394" className="nav-phone"><Phone size={15} /> +91 9999741394</a>
-            <button onClick={() => setShowPopup(true)} style={{ background:'linear-gradient(135deg,#c0392b,#e74c3c)', color:'#fff', border:'none', borderRadius:10, padding:'10px 22px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit' }}>Book Now</button>
+          <div
+            className="nav-desktop"
+            style={{ display: "flex", alignItems: "center", gap: 12 }}
+          >
+            <a href="tel:+919999741394" className="nav-phone">
+              <Phone size={15} /> +91 9999741394
+            </a>
+            <button
+              onClick={() => setShowPopup(true)}
+              style={{
+                background: "linear-gradient(135deg,#c0392b,#e74c3c)",
+                color: "#fff",
+                border: "none",
+                borderRadius: 10,
+                padding: "10px 22px",
+                fontWeight: 700,
+                fontSize: 14,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              Book Now
+            </button>
           </div>
 
-          <button className="nav-mobile-btn" onClick={() => setMenuOpen(!menuOpen)}
-            style={{ display:'none', background:'none', border:'none', cursor:'pointer', color:'#1a3a5c', padding:8, alignItems:'center' }}>
+          <button
+            className="nav-mobile-btn"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              display: "none",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#1a3a5c",
+              padding: 8,
+              alignItems: "center",
+            }}
+          >
             {menuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
 
         {menuOpen && (
-          <div style={{ background:'#fff', borderTop:'1px solid #edf2f7', padding:'18px 24px 24px' }}>
-            {navLinks.map(n => (
-              <button key={n} onClick={() => scrollTo(n.toLowerCase())}
-                style={{ display:'block', width:'100%', textAlign:'left', background:'none', border:'none', fontFamily:'inherit', fontSize:16, fontWeight:600, color:'#333', padding:'13px 0', borderBottom:'1px solid #f3f4f6', cursor:'pointer' }}>
+          <div
+            style={{
+              background: "#fff",
+              borderTop: "1px solid #edf2f7",
+              padding: "18px 24px 24px",
+            }}
+          >
+            {navLinks.map((n) => (
+              <button
+                key={n}
+                onClick={() => scrollTo(n.toLowerCase())}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  background: "none",
+                  border: "none",
+                  fontFamily: "inherit",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#333",
+                  padding: "13px 0",
+                  borderBottom: "1px solid #f3f4f6",
+                  cursor: "pointer",
+                }}
+              >
                 {n}
               </button>
             ))}
-            <div style={{ display:'flex', gap:12, marginTop:18, flexWrap:'wrap' }}>
-              <a href="tel:+919999741394" className="btn-outline-blue" style={{ flex:1, justifyContent:'center', fontSize:14, padding:'12px 16px' }}>
+            <div
+              style={{
+                display: "flex",
+                gap: 12,
+                marginTop: 18,
+                flexWrap: "wrap",
+              }}
+            >
+              <a
+                href="tel:+919999741394"
+                className="btn-outline-blue"
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  fontSize: 14,
+                  padding: "12px 16px",
+                }}
+              >
                 <Phone size={15} /> Call
               </a>
-              <button className="btn-red" onClick={() => { setShowPopup(true); setMenuOpen(false); }} style={{ flex:1, justifyContent:'center', animation:'none', fontSize:14, padding:'12px 16px' }}>
+              <button
+                className="btn-red"
+                onClick={() => {
+                  setShowPopup(true);
+                  setMenuOpen(false);
+                }}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  animation: "none",
+                  fontSize: 14,
+                  padding: "12px 16px",
+                }}
+              >
                 Book Now
               </button>
             </div>
@@ -475,30 +924,77 @@ export default function LastCare() {
         </div>
 
         <div className="hero-content">
-          <div style={{ maxWidth:620 }}>
-            <h1 className="hero-headline anim-up" style={{ animationDelay:'.1s' }}>
+          <div style={{ maxWidth: 620 }}>
+            <h1
+              className="hero-headline anim-up"
+              style={{ animationDelay: ".1s" }}
+            >
               We Stand With You <span>In Times of Grief</span>
             </h1>
-            <p className="hero-sub anim-up" style={{ animationDelay:'.2s' }}>
-              Medical-grade dead body freezer boxes delivered in <strong style={{ color:'#fff' }}>30–60 minutes</strong> across all sectors of Greater Noida. Available 24/7 with transparent pricing and compassionate service.
+            <p className="hero-sub anim-up" style={{ animationDelay: ".2s" }}>
+              Medical-grade dead body freezer boxes delivered in{" "}
+              <strong style={{ color: "#fff" }}>30–60 minutes</strong> across
+              all sectors of Greater Noida. Available 24/7 with transparent
+              pricing and compassionate service.
             </p>
-            <div className="hero-btns anim-up" style={{ animationDelay:'.3s' }}>
-              <button className="btn-red" onClick={() => setShowPopup(true)} style={{ fontSize:15, padding:'14px 28px' }}>
+            <div
+              className="hero-btns anim-up"
+              style={{ animationDelay: ".3s" }}
+            >
+              <button
+                className="btn-red"
+                onClick={() => setShowPopup(true)}
+                style={{ fontSize: 15, padding: "14px 28px" }}
+              >
                 📲 Book Freezer Box <ArrowRight size={16} />
               </button>
-              <a href="tel:+919999741394" className="btn-outline-white" style={{ fontSize:15, padding:'14px 24px' }}>
+              <a
+                href="tel:+919999741394"
+                className="btn-outline-white"
+                style={{ fontSize: 15, padding: "14px 24px" }}
+              >
                 <Phone size={16} /> +91 9999741394
               </a>
             </div>
-            <div className="hero-trust anim-up" style={{ animationDelay:'.4s' }}>
-              {[['⚡','30–60 Min Delivery'],['❄️','Medical Grade Box'],['💰','No Hidden Charges'],['🏆','1000+ Families']].map(([ic,tx]) => (
-                <div key={tx} className="trust-item"><span style={{ fontSize:16 }}>{ic}</span>{tx}</div>
+            <div
+              className="hero-trust anim-up"
+              style={{ animationDelay: ".4s" }}
+            >
+              {[
+                ["⚡", "30–60 Min Delivery"],
+                ["❄️", "Medical Grade Box"],
+                ["💰", "No Hidden Charges"],
+                ["🏆", "1000+ Families"],
+              ].map(([ic, tx]) => (
+                <div key={tx} className="trust-item">
+                  <span style={{ fontSize: 16 }}>{ic}</span>
+                  {tx}
+                </div>
               ))}
             </div>
           </div>
         </div>
-        <div style={{ position:'absolute', bottom:28, left:'50%', transform:'translateX(-50%)', zIndex:3, display:'flex', flexDirection:'column', alignItems:'center', gap:6, opacity:0.5 }}>
-          <div style={{ width:1, height:36, background:'linear-gradient(to bottom,transparent,#fff)' }} />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 28,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 6,
+            opacity: 0.5,
+          }}
+        >
+          <div
+            style={{
+              width: 1,
+              height: 36,
+              background: "linear-gradient(to bottom,transparent,#fff)",
+            }}
+          />
           <ChevronDown size={18} color="#fff" />
         </div>
       </section>
@@ -506,10 +1002,19 @@ export default function LastCare() {
       {/* ══ MARQUEE ══ */}
       <div className="marquee-wrap">
         <div className="marquee-track">
-          {[...Array(2)].map((_,rep) =>
-            ['❄️ Dead Body Freezer Box on Rent','🚨 24/7 Emergency Support','🚐 Dead Body Transportation','🚑 Ambulance Services','🕉️ Funeral Arrangements','📋 Documentation Support'].map((item,i) => (
-              <span key={`${rep}-${i}`} className="marquee-item">{item}</span>
-            ))
+          {[...Array(2)].map((_, rep) =>
+            [
+              "❄️ Dead Body Freezer Box on Rent",
+              "🚨 24/7 Emergency Support",
+              "🚐 Dead Body Transportation",
+              "🚑 Ambulance Services",
+              "🕉️ Funeral Arrangements",
+              "📋 Documentation Support",
+            ].map((item, i) => (
+              <span key={`${rep}-${i}`} className="marquee-item">
+                {item}
+              </span>
+            )),
           )}
         </div>
       </div>
@@ -518,13 +1023,37 @@ export default function LastCare() {
       <div className="stats-bar">
         <div className="stats-inner">
           {[
-            {n:'1000+',l:'Families Served',ic:<Users size={22} color="rgba(255,255,255,0.5)"/>},
-            {n:'24/7',l:'Always Available',ic:<Clock size={22} color="rgba(255,255,255,0.5)"/>},
-            {n:'30 Min',l:'Avg. Delivery Time',ic:<Zap size={22} color="rgba(255,255,255,0.5)"/>},
-            {n:'100%',l:'Client Satisfaction',ic:<Star size={22} color="rgba(255,255,255,0.5)"/>},
-          ].map((s,i) => (
+            {
+              n: "1000+",
+              l: "Families Served",
+              ic: <Users size={22} color="rgba(255,255,255,0.5)" />,
+            },
+            {
+              n: "24/7",
+              l: "Always Available",
+              ic: <Clock size={22} color="rgba(255,255,255,0.5)" />,
+            },
+            {
+              n: "30 Min",
+              l: "Avg. Delivery Time",
+              ic: <Zap size={22} color="rgba(255,255,255,0.5)" />,
+            },
+            {
+              n: "100%",
+              l: "Client Satisfaction",
+              ic: <Star size={22} color="rgba(255,255,255,0.5)" />,
+            },
+          ].map((s, i) => (
             <div key={i} className="stat-cell">
-              <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>{s.ic}</div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: 8,
+                }}
+              >
+                {s.ic}
+              </div>
               <div className="stat-num">{s.n}</div>
               <div className="stat-lbl">{s.l}</div>
             </div>
@@ -533,30 +1062,73 @@ export default function LastCare() {
       </div>
 
       {/* ══ ABOUT ══ */}
-      <section id="about" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#fff' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+      <section
+        id="about"
+        style={{ padding: "clamp(60px,8vw,100px) 24px", background: "#fff" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div className="about-grid">
             <div className="about-imgs">
-              <img src="https://i.pinimg.com/736x/79/82/03/7982033729bec6631c8f54dc96a1c12a.jpg" alt="Professional team" className="about-img-main" />
+              <img
+                src="https://i.pinimg.com/736x/79/82/03/7982033729bec6631c8f54dc96a1c12a.jpg"
+                alt="Professional team"
+                className="about-img-main"
+              />
               <div className="about-badge">
                 <div className="about-badge-num">10+</div>
                 <div className="about-badge-lbl">Years of Trusted Service</div>
               </div>
-              <img src="https://i.pinimg.com/736x/ad/7b/aa/ad7baab8cec8552796fda0dec9a87232.jpg" alt="Care" className="about-img-sm" />
+              <img
+                src="https://i.pinimg.com/736x/ad/7b/aa/ad7baab8cec8552796fda0dec9a87232.jpg"
+                alt="Care"
+                className="about-img-sm"
+              />
             </div>
             <div>
-              <div className="section-label"><Heart size={13} /> About Us</div>
-              <h2 className="about-title">Compassionate Care<br /><span>When It Matters Most</span></h2>
-              <p className="about-body">With over a decade of experience, we specialise in dead body freezer box rental services along with ambulance support and dignified transportation — helping families navigate their most difficult moments with ease and peace of mind.</p>
-              <p className="about-body">Our team is committed to the highest standards of care, hygiene, and respect, ensuring the body is preserved safely while providing compassionate support to grieving families across all of Greater Noida.</p>
+              <div className="section-label">
+                <Heart size={13} /> About Us
+              </div>
+              <h2 className="about-title">
+                Compassionate Care
+                <br />
+                <span>When It Matters Most</span>
+              </h2>
+              <p className="about-body">
+                With over a decade of experience, we specialise in dead body
+                freezer box rental services along with ambulance support and
+                dignified transportation — helping families navigate their most
+                difficult moments with ease and peace of mind.
+              </p>
+              <p className="about-body">
+                Our team is committed to the highest standards of care, hygiene,
+                and respect, ensuring the body is preserved safely while
+                providing compassionate support to grieving families across all
+                of Greater Noida.
+              </p>
               <div className="check-list">
-                {['Licensed and certified professionals','Compassionate and experienced team','Transparent pricing with no hidden costs','Complete documentation assistance'].map(t => (
-                  <div key={t} className="check-item"><CheckCircle size={18} color="#2e7d32" style={{ flexShrink:0 }} /><span>{t}</span></div>
+                {[
+                  "Licensed and certified professionals",
+                  "Compassionate and experienced team",
+                  "Transparent pricing with no hidden costs",
+                  "Complete documentation assistance",
+                ].map((t) => (
+                  <div key={t} className="check-item">
+                    <CheckCircle
+                      size={18}
+                      color="#2e7d32"
+                      style={{ flexShrink: 0 }}
+                    />
+                    <span>{t}</span>
+                  </div>
                 ))}
               </div>
-              <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
-                <button className="btn-blue" onClick={() => setShowPopup(true)}>Book Freezer Box <ArrowRight size={16} /></button>
-                <a href="tel:+919999741394" className="btn-outline-blue"><Phone size={16} /> Call Now</a>
+              <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                <button className="btn-blue" onClick={() => setShowPopup(true)}>
+                  Book Freezer Box <ArrowRight size={16} />
+                </button>
+                <a href="tel:+919999741394" className="btn-outline-blue">
+                  <Phone size={16} /> Call Now
+                </a>
               </div>
             </div>
           </div>
@@ -564,33 +1136,84 @@ export default function LastCare() {
       </section>
 
       {/* ══ SERVICES ══ */}
-      <section id="services" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#f7faff' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:60 }}>
-            <div className="section-label" style={{ justifyContent:'center' }}>❄️ Our Services</div>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(28px,4.5vw,52px)', fontWeight:900, color:'#1a1a2e', lineHeight:1.12 }}>
-              Complete <span style={{ color:'#1565c0' }}>Support Services</span>
+      <section
+        id="services"
+        style={{ padding: "clamp(60px,8vw,100px) 24px", background: "#f7faff" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 60 }}>
+            <div className="section-label" style={{ justifyContent: "center" }}>
+              ❄️ Our Services
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: "clamp(28px,4.5vw,52px)",
+                fontWeight: 900,
+                color: "#1a1a2e",
+                lineHeight: 1.12,
+              }}
+            >
+              Complete{" "}
+              <span style={{ color: "#1565c0" }}>Support Services</span>
             </h2>
-            <p style={{ color:'#6b7280', fontSize:16, marginTop:12, maxWidth:440, margin:'12px auto 0' }}>Everything your family needs — available with one call</p>
+            <p
+              style={{
+                color: "#6b7280",
+                fontSize: 16,
+                marginTop: 12,
+                maxWidth: 440,
+                margin: "12px auto 0",
+              }}
+            >
+              Everything your family needs — available with one call
+            </p>
           </div>
           <div className="services-wrap">
             <div className="service-tabs">
-              {services.map((s,i) => (
-                <button key={i} className={`s-tab ${activeService===i?'active':''}`} onClick={() => setActiveService(i)}>
+              {services.map((s, i) => (
+                <button
+                  key={i}
+                  className={`s-tab ${activeService === i ? "active" : ""}`}
+                  onClick={() => setActiveService(i)}
+                >
                   <span className="s-tab-icon">{s.icon}</span>
-                  <div><div className="s-tab-title">{s.title}</div></div>
-                  {activeService===i && <ArrowRight size={14} color="#1565c0" className="arrow-hide" style={{ marginLeft:'auto', flexShrink:0 }} />}
+                  <div>
+                    <div className="s-tab-title">{s.title}</div>
+                  </div>
+                  {activeService === i && (
+                    <ArrowRight
+                      size={14}
+                      color="#1565c0"
+                      className="arrow-hide"
+                      style={{ marginLeft: "auto", flexShrink: 0 }}
+                    />
+                  )}
                 </button>
               ))}
             </div>
             <div className="service-detail">
-              <div className="service-detail-icon">{services[activeService].icon}</div>
-              <h3 className="service-detail-title">{services[activeService].title}</h3>
-              <p className="service-detail-desc">{services[activeService].desc}</p>
-              <div className="service-chips">
-                {services[activeService].features.map(f => <span key={f} className="chip">✓ {f}</span>)}
+              <div className="service-detail-icon">
+                {services[activeService].icon}
               </div>
-              <button className="btn-blue" onClick={() => setShowPopup(true)} style={{ animation:'none' }}>
+              <h3 className="service-detail-title">
+                {services[activeService].title}
+              </h3>
+              <p className="service-detail-desc">
+                {services[activeService].desc}
+              </p>
+              <div className="service-chips">
+                {services[activeService].features.map((f) => (
+                  <span key={f} className="chip">
+                    ✓ {f}
+                  </span>
+                ))}
+              </div>
+              <button
+                className="btn-blue"
+                onClick={() => setShowPopup(true)}
+                style={{ animation: "none" }}
+              >
                 Book This Service <ArrowRight size={16} />
               </button>
             </div>
@@ -599,23 +1222,59 @@ export default function LastCare() {
       </section>
 
       {/* ══ WHY US ══ */}
-      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#fff' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:52 }}>
-            <div className="section-label" style={{ justifyContent:'center' }}><Shield size={13} /> Why Choose Us</div>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
-              Our Work <span style={{ color:'#1565c0' }}>Speaks for Itself</span>
+      <section
+        style={{ padding: "clamp(60px,8vw,90px) 24px", background: "#fff" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <div className="section-label" style={{ justifyContent: "center" }}>
+              <Shield size={13} /> Why Choose Us
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: "clamp(26px,3.5vw,44px)",
+                fontWeight: 900,
+                color: "#1a1a2e",
+              }}
+            >
+              Our Work{" "}
+              <span style={{ color: "#1565c0" }}>Speaks for Itself</span>
             </h2>
           </div>
           <div className="why-grid">
             {[
-              {ic:'⚡',t:'30–60 Min Delivery',d:'Fastest response time in Greater Noida'},
-              {ic:'❄️',t:'Medical Grade Box',d:'0°C to –5°C certified & hygienic'},
-              {ic:'💰',t:'Fair & Transparent',d:'Zero hidden charges, always'},
-              {ic:'🤝',t:'Caring Team',d:'Trained, compassionate professionals'},
-              {ic:'📍',t:'Pan-Greater Noida',d:'Every sector fully covered'},
-              {ic:'📋',t:'Documentation Help',d:'Legal formalities made easy'},
-            ].map((w,i) => (
+              {
+                ic: "⚡",
+                t: "30–60 Min Delivery",
+                d: "Fastest response time in Greater Noida",
+              },
+              {
+                ic: "❄️",
+                t: "Medical Grade Box",
+                d: "0°C to –5°C certified & hygienic",
+              },
+              {
+                ic: "💰",
+                t: "Fair & Transparent",
+                d: "Zero hidden charges, always",
+              },
+              {
+                ic: "🤝",
+                t: "Caring Team",
+                d: "Trained, compassionate professionals",
+              },
+              {
+                ic: "📍",
+                t: "Pan-Greater Noida",
+                d: "Every sector fully covered",
+              },
+              {
+                ic: "📋",
+                t: "Documentation Help",
+                d: "Legal formalities made easy",
+              },
+            ].map((w, i) => (
               <div key={i} className="why-card">
                 <div className="why-icon">{w.ic}</div>
                 <div className="why-title">{w.t}</div>
@@ -627,27 +1286,72 @@ export default function LastCare() {
       </section>
 
       {/* ══ CONTACT ══ */}
-      <section id="contact" style={{ padding:'clamp(60px,8vw,100px) 24px', background:'#f7faff' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:60 }}>
-            <div className="section-label" style={{ justifyContent:'center' }}><Phone size={13} /> Get In Touch</div>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(28px,4.5vw,52px)', fontWeight:900, color:'#1a1a2e', lineHeight:1.12 }}>
-              Contact <span style={{ color:'#1565c0' }}>Us Today</span>
+      <section
+        id="contact"
+        style={{ padding: "clamp(60px,8vw,100px) 24px", background: "#f7faff" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 60 }}>
+            <div className="section-label" style={{ justifyContent: "center" }}>
+              <Phone size={13} /> Get In Touch
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: "clamp(28px,4.5vw,52px)",
+                fontWeight: 900,
+                color: "#1a1a2e",
+                lineHeight: 1.12,
+              }}
+            >
+              Contact <span style={{ color: "#1565c0" }}>Us Today</span>
             </h2>
-            <p style={{ color:'#6b7280', fontSize:16, marginTop:12 }}>Our compassionate team is available 24/7 to assist you</p>
+            <p style={{ color: "#6b7280", fontSize: 16, marginTop: 12 }}>
+              Our compassionate team is available 24/7 to assist you
+            </p>
           </div>
           <div className="contact-grid">
             <div className="contact-info-card">
-              <img src="/img.jpeg" alt="Support team" className="contact-info-img" />
+              <img
+                src="/img.jpeg"
+                alt="Support team"
+                className="contact-info-img"
+              />
               <div className="contact-info-body">
                 <h3 className="contact-info-title">Quick Contact</h3>
                 {[
-                  {ic:<Phone size={17} color="#90caf9"/>, label:'+91 9999741394', sub:'24/7 Helpline', href:'tel:+919999741394'},
-                  {ic:<Mail size={17} color="#ce93d8"/>, label:'info@lastcarefreezerbox.in', sub:'Email us anytime', href:'mailto:info@lastcarefreezerbox.in'},
-                  {ic:<MapPin size={17} color="#80cbc4"/>, label:'HCPQ+R42 Amrapali Icon Leisure Valley Gr Noida, UP 201318', sub:'Coverage area', href:null},
-                  {ic:<Clock size={17} color="#a5d6a7"/>, label:'24 / 7 Available', sub:'Always here for you', href:null},
-                ].map((c,i) => (
-                  <a key={i} className="contact-row" href={c.href||'#'} style={{ textDecoration:'none' }}>
+                  {
+                    ic: <Phone size={17} color="#90caf9" />,
+                    label: "+91 9999741394",
+                    sub: "24/7 Helpline",
+                    href: "tel:+919999741394",
+                  },
+                  {
+                    ic: <Mail size={17} color="#ce93d8" />,
+                    label: "info@lastcarefreezerbox.in",
+                    sub: "Email us anytime",
+                    href: "mailto:info@lastcarefreezerbox.in",
+                  },
+                  {
+                    ic: <MapPin size={17} color="#80cbc4" />,
+                    label:
+                      "HCPQ+R42 Amrapali Icon Leisure Valley Gr Noida, UP 201318",
+                    sub: "Coverage area",
+                    href: null,
+                  },
+                  {
+                    ic: <Clock size={17} color="#a5d6a7" />,
+                    label: "24 / 7 Available",
+                    sub: "Always here for you",
+                    href: null,
+                  },
+                ].map((c, i) => (
+                  <a
+                    key={i}
+                    className="contact-row"
+                    href={c.href || "#"}
+                    style={{ textDecoration: "none" }}
+                  >
                     <div className="contact-row-icon">{c.ic}</div>
                     <div>
                       <div className="contact-row-main">{c.label}</div>
@@ -662,27 +1366,91 @@ export default function LastCare() {
               <form onSubmit={handleContact}>
                 <div className="field-wrap">
                   <label className="field-label">Full Name *</label>
-                  <input required type="text" value={contactForm.name} onChange={e=>setContactForm({...contactForm,name:e.target.value})} placeholder="Your name" className="field-input" />
+                  <input
+                    required
+                    type="text"
+                    value={contactForm.name}
+                    onChange={(e) =>
+                      setContactForm({ ...contactForm, name: e.target.value })
+                    }
+                    placeholder="Your name"
+                    className="field-input"
+                  />
                 </div>
                 <div className="form-row">
                   <div className="field-wrap">
                     <label className="field-label">Phone *</label>
-                    <input required type="tel" value={contactForm.phone} onChange={e=>setContactForm({...contactForm,phone:e.target.value})} placeholder="+91" className="field-input" />
+                    <input
+                      required
+                      type="tel"
+                      value={contactForm.phone}
+                      onChange={(e) =>
+                        setContactForm({
+                          ...contactForm,
+                          phone: e.target.value,
+                        })
+                      }
+                      placeholder="+91"
+                      className="field-input"
+                    />
                   </div>
                   <div className="field-wrap">
                     <label className="field-label">Email</label>
-                    <input type="email" value={contactForm.email} onChange={e=>setContactForm({...contactForm,email:e.target.value})} placeholder="email@example.com" className="field-input" />
+                    <input
+                      type="email"
+                      value={contactForm.email}
+                      onChange={(e) =>
+                        setContactForm({
+                          ...contactForm,
+                          email: e.target.value,
+                        })
+                      }
+                      placeholder="email@example.com"
+                      className="field-input"
+                    />
                   </div>
                 </div>
                 <div className="field-wrap">
                   <label className="field-label">Location</label>
-                  <input type="text" value={contactForm.location} onChange={e=>setContactForm({...contactForm,location:e.target.value})} placeholder="Sector, Greater Noida" className="field-input" />
+                  <input
+                    type="text"
+                    value={contactForm.location}
+                    onChange={(e) =>
+                      setContactForm({
+                        ...contactForm,
+                        location: e.target.value,
+                      })
+                    }
+                    placeholder="Sector, Greater Noida"
+                    className="field-input"
+                  />
                 </div>
                 <div className="field-wrap">
                   <label className="field-label">Message</label>
-                  <textarea rows={4} value={contactForm.message} onChange={e=>setContactForm({...contactForm,message:e.target.value})} placeholder="How can we help you?" className="field-input" style={{ resize:'none' }} />
+                  <textarea
+                    rows={4}
+                    value={contactForm.message}
+                    onChange={(e) =>
+                      setContactForm({
+                        ...contactForm,
+                        message: e.target.value,
+                      })
+                    }
+                    placeholder="How can we help you?"
+                    className="field-input"
+                    style={{ resize: "none" }}
+                  />
                 </div>
-                <button type="submit" className="btn-red" style={{ width:'100%', justifyContent:'center', animation:'none', fontSize:15 }}>
+                <button
+                  type="submit"
+                  className="btn-red"
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    animation: "none",
+                    fontSize: 15,
+                  }}
+                >
                   Send Message →
                 </button>
               </form>
@@ -692,58 +1460,169 @@ export default function LastCare() {
       </section>
 
       {/* ══ MAP ══ */}
-      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#fff' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:44 }}>
-            <div className="section-label" style={{ justifyContent:'center' }}><MapPin size={13} /> Coverage Area</div>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
-              Serving <span style={{ color:'#1565c0' }}>All of Greater Noida</span>
+      <section
+        style={{ padding: "clamp(60px,8vw,90px) 24px", background: "#fff" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <div className="section-label" style={{ justifyContent: "center" }}>
+              <MapPin size={13} /> Coverage Area
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: "clamp(26px,3.5vw,44px)",
+                fontWeight: 900,
+                color: "#1a1a2e",
+              }}
+            >
+              Serving{" "}
+              <span style={{ color: "#1565c0" }}>All of Greater Noida</span>
             </h2>
-            <p style={{ color:'#6b7280', fontSize:15, marginTop:10 }}>Full coverage across Greater Noida, Greater Greater Noida & Greater Noida Extension</p>
+            <p style={{ color: "#6b7280", fontSize: 15, marginTop: 10 }}>
+              Full coverage across Greater Noida, Greater Greater Noida &
+              Greater Noida Extension
+            </p>
           </div>
           <div className="map-frame">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.426386472271!2d77.43527887495509!3d28.586982736148723!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceff569c53fdb%3A0x709db43c2508a7f8!2sIcon%20Leisure%20Valley!5e0!3m2!1sen!2sin!4v1773754999392!5m2!1sen!2sin"
-              width="100%" height="420" style={{ border:0, display:'block' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.426386472271!2d77.43527887495509!3d28.586982736148723!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceff569c53fdb%3A0x709db43c2508a7f8!2sIcon%20Leisure%20Valley!5e0!3m2!1sen!2sin!4v1773754999392!5m2!1sen!2sin"
+              width="100%"
+              height="420"
+              style={{ border: 0, display: "block" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
-          <div style={{ marginTop:32, textAlign:'center' }}>
-            <div style={{ display:'inline-flex', flexWrap:'wrap', gap:20, alignItems:'center', background:'linear-gradient(135deg,#1a3a5c,#1565c0)', color:'#fff', padding:'18px 32px', borderRadius:18, boxShadow:'0 8px 30px rgba(26,58,92,0.28)' }}>
+          <div style={{ marginTop: 32, textAlign: "center" }}>
+            <div
+              style={{
+                display: "inline-flex",
+                flexWrap: "wrap",
+                gap: 20,
+                alignItems: "center",
+                background: "linear-gradient(135deg,#1a3a5c,#1565c0)",
+                color: "#fff",
+                padding: "18px 32px",
+                borderRadius: 18,
+                boxShadow: "0 8px 30px rgba(26,58,92,0.28)",
+              }}
+            >
               <Phone size={20} />
-              <div style={{ textAlign:'left' }}>
-                <div style={{ fontSize:11, opacity:0.75 }}>Need Immediate Service?</div>
-                <a href="tel:+919999741394" style={{ color:'#fff', textDecoration:'none', fontWeight:800, fontSize:20 }}>+91 9999741394</a>
+              <div style={{ textAlign: "left" }}>
+                <div style={{ fontSize: 11, opacity: 0.75 }}>
+                  Need Immediate Service?
+                </div>
+                <a
+                  href="tel:+919999741394"
+                  style={{
+                    color: "#fff",
+                    textDecoration: "none",
+                    fontWeight: 800,
+                    fontSize: 20,
+                  }}
+                >
+                  +91 9999741394
+                </a>
               </div>
-              <span style={{ fontSize:14, fontWeight:600, opacity:0.85 }}>We reach you in 30–60 minutes</span>
+              <span style={{ fontSize: 14, fontWeight: 600, opacity: 0.85 }}>
+                We reach you in 30–60 minutes
+              </span>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══ FAQ ══ */}
-      <section style={{ padding:'clamp(60px,8vw,90px) 24px', background:'#f7faff' }}>
-        <div style={{ maxWidth:1100, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:52 }}>
-            <div className="section-label" style={{ justifyContent:'center' }}>❓ FAQs</div>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:'clamp(26px,3.5vw,44px)', fontWeight:900, color:'#1a1a2e' }}>
-              Frequently Asked <span style={{ color:'#1565c0' }}>Questions</span>
+      <section
+        style={{ padding: "clamp(60px,8vw,90px) 24px", background: "#f7faff" }}
+      >
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <div className="section-label" style={{ justifyContent: "center" }}>
+              ❓ FAQs
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: "clamp(26px,3.5vw,44px)",
+                fontWeight: 900,
+                color: "#1a1a2e",
+              }}
+            >
+              Frequently Asked{" "}
+              <span style={{ color: "#1565c0" }}>Questions</span>
             </h2>
           </div>
           <div className="faq-grid">
-            {faqs.map((f,i) => (
+            {faqs.map((f, i) => (
               <div key={i} className="faq-card">
-                <button className="faq-q-btn" onClick={() => setOpenFaq(openFaq===i?null:i)}>
+                <button
+                  className="faq-q-btn"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                >
                   <span className="faq-q-text">{f.q}</span>
-                  <ChevronDown size={19} color="#1565c0" style={{ flexShrink:0, transform:openFaq===i?'rotate(180deg)':'none', transition:'transform .3s' }} />
+                  <ChevronDown
+                    size={19}
+                    color="#1565c0"
+                    style={{
+                      flexShrink: 0,
+                      transform: openFaq === i ? "rotate(180deg)" : "none",
+                      transition: "transform .3s",
+                    }}
+                  />
                 </button>
-                {openFaq===i && <div className="faq-answer">{f.a}</div>}
+                {openFaq === i && <div className="faq-answer">{f.a}</div>}
               </div>
             ))}
           </div>
-          <div style={{ marginTop:52, textAlign:'center', background:'#fff', padding:'clamp(24px,5vw,44px)', borderRadius:24, border:'1.5px solid #e0e7ff', boxShadow:'0 4px 24px rgba(26,58,92,0.07)' }}>
-            <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:24, fontWeight:800, color:'#1a1a2e', marginBottom:8 }}>Still Have Questions?</h3>
-            <p style={{ color:'#6b7280', fontSize:15, marginBottom:24 }}>We're available 24/7 — call us or send a message anytime</p>
-            <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
-              <a href="tel:+919999741394" className="btn-red" style={{ textDecoration:'none', animation:'none' }}><Phone size={16} /> Call Now</a>
-              <button className="btn-outline-blue" onClick={() => scrollTo('contact')}>Contact Us</button>
+          <div
+            style={{
+              marginTop: 52,
+              textAlign: "center",
+              background: "#fff",
+              padding: "clamp(24px,5vw,44px)",
+              borderRadius: 24,
+              border: "1.5px solid #e0e7ff",
+              boxShadow: "0 4px 24px rgba(26,58,92,0.07)",
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: "'Fraunces',serif",
+                fontSize: 24,
+                fontWeight: 800,
+                color: "#1a1a2e",
+                marginBottom: 8,
+              }}
+            >
+              Still Have Questions?
+            </h3>
+            <p style={{ color: "#6b7280", fontSize: 15, marginBottom: 24 }}>
+              We're available 24/7 — call us or send a message anytime
+            </p>
+            <div
+              style={{
+                display: "flex",
+                gap: 14,
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <a
+                href="tel:+919999741394"
+                className="btn-red"
+                style={{ textDecoration: "none", animation: "none" }}
+              >
+                <Phone size={16} /> Call Now
+              </a>
+              <button
+                className="btn-outline-blue"
+                onClick={() => scrollTo("contact")}
+              >
+                Contact Us
+              </button>
             </div>
           </div>
         </div>
@@ -753,37 +1632,126 @@ export default function LastCare() {
       <footer className="footer-wrap">
         <div className="footer-grid">
           <div>
-            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:4 }}>
-            
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 4,
+              }}
+            >
               <div>
-                <div style={{ fontFamily:"'Fraunces',serif", fontWeight:900, fontSize:26, color:'#fff', lineHeight:1 }}>LastCare</div>
-                <div style={{ fontSize:10, color:'#90caf9', fontWeight:700, letterSpacing:2.5, textTransform:'uppercase', marginTop:3 }}>Freezer Box on Rent</div>
+                <div
+                  style={{
+                    fontFamily: "'Fraunces',serif",
+                    fontWeight: 900,
+                    fontSize: 26,
+                    color: "#fff",
+                    lineHeight: 1,
+                  }}
+                >
+                  LastCare
+                </div>
+                <div
+                  style={{
+                    fontSize: 10,
+                    color: "#90caf9",
+                    fontWeight: 700,
+                    letterSpacing: 2.5,
+                    textTransform: "uppercase",
+                    marginTop: 3,
+                  }}
+                >
+                  Freezer Box on Rent
+                </div>
               </div>
             </div>
-            <p className="footer-brand-desc">24/7 medical-grade freezer box rental and funeral support services across every sector of Greater Noida — handled with dignity, compassion, and professionalism.</p>
+            <p className="footer-brand-desc">
+              24/7 medical-grade freezer box rental and funeral support services
+              across every sector of Greater Noida — handled with dignity,
+              compassion, and professionalism.
+            </p>
           </div>
           <div>
             <div className="footer-heading">Quick Links</div>
-            {navLinks.map(n => <button key={n} className="footer-link" onClick={() => scrollTo(n.toLowerCase())}>{n}</button>)}
+            {navLinks.map((n) => (
+              <button
+                key={n}
+                className="footer-link"
+                onClick={() => scrollTo(n.toLowerCase())}
+              >
+                {n}
+              </button>
+            ))}
           </div>
           <div>
             <div className="footer-heading">Contact</div>
             {[
-              {ic:<Phone size={15}/>, content:<a href="tel:+919999741394" className="footer-contact-txt">+91 9999741394</a>, sub:'24/7 Helpline'},
-              {ic:<Mail size={15}/>, content:<a href="mailto:info@lastcarefreezerbox.in" className="footer-contact-txt" style={{ fontSize:12 }}>info@lastcarefreezerbox.in</a>, sub:''},
-              {ic:<MapPin size={15}/>, content:<span className="footer-contact-txt">HCPQ+R42 Amrapali Icon Leisure Valley Greater Noida, UP 201318</span>, sub:''},
-            ].map((c,i) => (
+              {
+                ic: <Phone size={15} />,
+                content: (
+                  <a href="tel:+919999741394" className="footer-contact-txt">
+                    +91 9999741394
+                  </a>
+                ),
+                sub: "24/7 Helpline",
+              },
+              {
+                ic: <Mail size={15} />,
+                content: (
+                  <a
+                    href="mailto:info@lastcarefreezerbox.in"
+                    className="footer-contact-txt"
+                    style={{ fontSize: 12 }}
+                  >
+                    info@lastcarefreezerbox.in
+                  </a>
+                ),
+                sub: "",
+              },
+              {
+                ic: <MapPin size={15} />,
+                content: (
+                  <span className="footer-contact-txt">
+                    HCPQ+R42 Amrapali Icon Leisure Valley Greater Noida, UP
+                    201318
+                  </span>
+                ),
+                sub: "",
+              },
+            ].map((c, i) => (
               <div key={i} className="footer-contact-row">
-                <span style={{ color:'rgba(255,255,255,0.5)', marginTop:2, flexShrink:0 }}>{c.ic}</span>
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.5)",
+                    marginTop: 2,
+                    flexShrink: 0,
+                  }}
+                >
+                  {c.ic}
+                </span>
                 <div>
                   {c.content}
-                  {c.sub && <div style={{ fontSize:11, color:'rgba(255,255,255,0.35)', marginTop:2 }}>{c.sub}</div>}
+                  {c.sub && (
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "rgba(255,255,255,0.35)",
+                        marginTop: 2,
+                      }}
+                    >
+                      {c.sub}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="footer-divider">© 2026 LastCare Freezer Box on Rent. All rights reserved. | Greater Noida, Uttar Pradesh</div>
+        <div className="footer-divider">
+          © 2026 LastCare Freezer Box on Rent. All rights reserved. | Greater
+          Noida, Uttar Pradesh
+        </div>
       </footer>
     </>
   );
