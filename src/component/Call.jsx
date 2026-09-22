@@ -3,7 +3,7 @@ import { FiPhone } from 'react-icons/fi';
 
 const CallIcon = () => {
   const handleCallClick = () => {
-    const phoneNumber = '9217535757';
+    const phoneNumber = '9999741394';
     window.location.href = `tel:${phoneNumber}`;
   };
 

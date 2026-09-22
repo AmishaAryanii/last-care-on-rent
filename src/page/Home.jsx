@@ -95,7 +95,7 @@ function PopupForm({ onClose }) {
                 📲 Submit Request
               </button>
               <p style={{ textAlign:'center', fontSize:11, color:'#aaa', marginTop:10 }}>
-                Or call: <a href="tel:+919217535757" style={{ color:'#1565c0', fontWeight:700 }}>+91 9217535757</a>
+                Or call: <a href="tel:+919999741394" style={{ color:'#1565c0', fontWeight:700 }}>+91 9999741394</a>
               </p>
             </form>
           )}
@@ -437,7 +437,7 @@ export default function LastCare() {
             {navLinks.map(n => <button key={n} className="nav-link" onClick={() => scrollTo(n.toLowerCase())}>{n}</button>)}
           </div>
           <div className="nav-desktop" style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <a href="tel:+919217535757" className="nav-phone"><Phone size={15} /> +91 9217535757</a>
+            <a href="tel:+919999741394" className="nav-phone"><Phone size={15} /> +91 9999741394</a>
             <button onClick={() => setShowPopup(true)} style={{ background:'linear-gradient(135deg,#c0392b,#e74c3c)', color:'#fff', border:'none', borderRadius:10, padding:'10px 22px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit' }}>Book Now</button>
           </div>
 
@@ -456,7 +456,7 @@ export default function LastCare() {
               </button>
             ))}
             <div style={{ display:'flex', gap:12, marginTop:18, flexWrap:'wrap' }}>
-              <a href="tel:+919217535757" className="btn-outline-blue" style={{ flex:1, justifyContent:'center', fontSize:14, padding:'12px 16px' }}>
+              <a href="tel:+919999741394" className="btn-outline-blue" style={{ flex:1, justifyContent:'center', fontSize:14, padding:'12px 16px' }}>
                 <Phone size={15} /> Call
               </a>
               <button className="btn-red" onClick={() => { setShowPopup(true); setMenuOpen(false); }} style={{ flex:1, justifyContent:'center', animation:'none', fontSize:14, padding:'12px 16px' }}>
@@ -486,8 +486,8 @@ export default function LastCare() {
               <button className="btn-red" onClick={() => setShowPopup(true)} style={{ fontSize:15, padding:'14px 28px' }}>
                 📲 Book Freezer Box <ArrowRight size={16} />
               </button>
-              <a href="tel:+919217535757" className="btn-outline-white" style={{ fontSize:15, padding:'14px 24px' }}>
-                <Phone size={16} /> +91 9217535757
+              <a href="tel:+919999741394" className="btn-outline-white" style={{ fontSize:15, padding:'14px 24px' }}>
+                <Phone size={16} /> +91 9999741394
               </a>
             </div>
             <div className="hero-trust anim-up" style={{ animationDelay:'.4s' }}>
@@ -556,7 +556,7 @@ export default function LastCare() {
               </div>
               <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
                 <button className="btn-blue" onClick={() => setShowPopup(true)}>Book Freezer Box <ArrowRight size={16} /></button>
-                <a href="tel:+919217535757" className="btn-outline-blue"><Phone size={16} /> Call Now</a>
+                <a href="tel:+919999741394" className="btn-outline-blue"><Phone size={16} /> Call Now</a>
               </div>
             </div>
           </div>
@@ -642,7 +642,7 @@ export default function LastCare() {
               <div className="contact-info-body">
                 <h3 className="contact-info-title">Quick Contact</h3>
                 {[
-                  {ic:<Phone size={17} color="#90caf9"/>, label:'+91 9217535757', sub:'24/7 Helpline', href:'tel:+919217535757'},
+                  {ic:<Phone size={17} color="#90caf9"/>, label:'+91 9999741394', sub:'24/7 Helpline', href:'tel:+919999741394'},
                   {ic:<Mail size={17} color="#ce93d8"/>, label:'info@lastcarefreezerbox.in', sub:'Email us anytime', href:'mailto:info@lastcarefreezerbox.in'},
                   {ic:<MapPin size={17} color="#80cbc4"/>, label:'HCPQ+R42 Amrapali Icon Leisure Valley Gr Noida, UP 201318', sub:'Coverage area', href:null},
                   {ic:<Clock size={17} color="#a5d6a7"/>, label:'24 / 7 Available', sub:'Always here for you', href:null},
@@ -710,7 +710,7 @@ export default function LastCare() {
               <Phone size={20} />
               <div style={{ textAlign:'left' }}>
                 <div style={{ fontSize:11, opacity:0.75 }}>Need Immediate Service?</div>
-                <a href="tel:+919217535757" style={{ color:'#fff', textDecoration:'none', fontWeight:800, fontSize:20 }}>+91 9217535757</a>
+                <a href="tel:+919999741394" style={{ color:'#fff', textDecoration:'none', fontWeight:800, fontSize:20 }}>+91 9999741394</a>
               </div>
               <span style={{ fontSize:14, fontWeight:600, opacity:0.85 }}>We reach you in 30–60 minutes</span>
             </div>
@@ -742,7 +742,7 @@ export default function LastCare() {
             <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:24, fontWeight:800, color:'#1a1a2e', marginBottom:8 }}>Still Have Questions?</h3>
             <p style={{ color:'#6b7280', fontSize:15, marginBottom:24 }}>We're available 24/7 — call us or send a message anytime</p>
             <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
-              <a href="tel:+919217535757" className="btn-red" style={{ textDecoration:'none', animation:'none' }}><Phone size={16} /> Call Now</a>
+              <a href="tel:+919999741394" className="btn-red" style={{ textDecoration:'none', animation:'none' }}><Phone size={16} /> Call Now</a>
               <button className="btn-outline-blue" onClick={() => scrollTo('contact')}>Contact Us</button>
             </div>
           </div>
@@ -769,7 +769,7 @@ export default function LastCare() {
           <div>
             <div className="footer-heading">Contact</div>
             {[
-              {ic:<Phone size={15}/>, content:<a href="tel:+919217535757" className="footer-contact-txt">+91 9217535757</a>, sub:'24/7 Helpline'},
+              {ic:<Phone size={15}/>, content:<a href="tel:+919999741394" className="footer-contact-txt">+91 9999741394</a>, sub:'24/7 Helpline'},
               {ic:<Mail size={15}/>, content:<a href="mailto:info@lastcarefreezerbox.in" className="footer-contact-txt" style={{ fontSize:12 }}>info@lastcarefreezerbox.in</a>, sub:''},
               {ic:<MapPin size={15}/>, content:<span className="footer-contact-txt">HCPQ+R42 Amrapali Icon Leisure Valley Greater Noida, UP 201318</span>, sub:''},
             ].map((c,i) => (
