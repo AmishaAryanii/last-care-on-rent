@@ -17,10 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 
-//  CHANGE 1: Backend URL (apna asli live URL yahan daalein)
-const API_URL = "https://YOUR-DOMAIN/backend/send-mail.php";
-
-//  CHANGE 2: Google Ads conversion tracking helper
+// ✅ Google Ads conversion tracking helper
 const trackLeadConversion = () => {
   if (typeof window.gtag === "function") {
     window.gtag("event", "conversion", {
@@ -37,7 +34,6 @@ function PopupForm({ onClose }) {
     message: "",
   });
   const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
   useEffect(() => {
@@ -46,30 +42,12 @@ function PopupForm({ onClose }) {
     return () => window.removeEventListener("resize", h);
   }, []);
 
-  // ✅ CHANGE 3: Popup form submit - backend par bhejta hai, success par conversion fire
-  const submit = async (e) => {
+  // ✅ Popup form submit - conversion fire hota hai
+  const submit = (e) => {
     e.preventDefault();
-    if (submitting) return;
-    setSubmitting(true);
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const result = await res.json();
-      if (result.success) {
-        trackLeadConversion();
-        setSent(true);
-        setTimeout(onClose, 2400);
-      } else {
-        alert(result.message || "Something went wrong. Please call us.");
-      }
-    } catch {
-      alert("Failed to submit. Please call +91 9999741394.");
-    } finally {
-      setSubmitting(false);
-    }
+    trackLeadConversion();
+    setSent(true);
+    setTimeout(onClose, 2400);
   };
 
   const inp = {
@@ -298,7 +276,6 @@ function PopupForm({ onClose }) {
               </div>
               <button
                 type="submit"
-                disabled={submitting}
                 style={{
                   width: "100%",
                   background: "linear-gradient(135deg,#c0392b,#e74c3c)",
@@ -308,8 +285,7 @@ function PopupForm({ onClose }) {
                   padding: "11px",
                   fontWeight: 700,
                   fontSize: 14,
-                  cursor: submitting ? "not-allowed" : "pointer",
-                  opacity: submitting ? 0.6 : 1,
+                  cursor: "pointer",
                   fontFamily: "inherit",
                   display: "flex",
                   alignItems: "center",
@@ -317,7 +293,7 @@ function PopupForm({ onClose }) {
                   gap: 8,
                 }}
               >
-                {submitting ? "Submitting..." : "📲 Submit Request"}
+                📲 Submit Request
               </button>
               <p
                 style={{
@@ -383,32 +359,18 @@ export default function LastCare() {
     setMenuOpen(false);
   };
 
-  // ✅ CHANGE 4: Contact form submit - backend par bhejta hai, success par conversion fire
-  const handleContact = async (e) => {
+  // ✅ Contact form submit - conversion fire hota hai
+  const handleContact = (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(contactForm),
-      });
-      const result = await res.json();
-      if (result.success) {
-        trackLeadConversion();
-        alert("Thank you! We will contact you shortly.");
-        setContactForm({
-          name: "",
-          phone: "",
-          email: "",
-          location: "",
-          message: "",
-        });
-      } else {
-        alert(result.message || "Something went wrong.");
-      }
-    } catch {
-      alert("Failed to submit. Please call +91 9999741394.");
-    }
+    trackLeadConversion();
+    alert("Thank you! We will contact you shortly.");
+    setContactForm({
+      name: "",
+      phone: "",
+      email: "",
+      location: "",
+      message: "",
+    });
   };
 
   const services = [
