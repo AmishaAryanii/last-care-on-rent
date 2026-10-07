@@ -17,6 +17,18 @@ import {
   Zap,
 } from "lucide-react";
 
+//  CHANGE 1: Backend URL (apna asli live URL yahan daalein)
+const API_URL = "https://YOUR-DOMAIN/backend/send-mail.php";
+
+//  CHANGE 2: Google Ads conversion tracking helper
+const trackLeadConversion = () => {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-18495362028/gOwWCMi-6pIdEOyno_NE",
+    });
+  }
+};
+
 function PopupForm({ onClose }) {
   const [form, setForm] = useState({
     name: "",
@@ -25,6 +37,7 @@ function PopupForm({ onClose }) {
     message: "",
   });
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
   useEffect(() => {
@@ -33,10 +46,30 @@ function PopupForm({ onClose }) {
     return () => window.removeEventListener("resize", h);
   }, []);
 
-  const submit = (e) => {
+  // ✅ CHANGE 3: Popup form submit - backend par bhejta hai, success par conversion fire
+  const submit = async (e) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(onClose, 2400);
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await res.json();
+      if (result.success) {
+        trackLeadConversion();
+        setSent(true);
+        setTimeout(onClose, 2400);
+      } else {
+        alert(result.message || "Something went wrong. Please call us.");
+      }
+    } catch {
+      alert("Failed to submit. Please call +91 9999741394.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inp = {
@@ -92,8 +125,6 @@ function PopupForm({ onClose }) {
           margin: "auto",
         }}
       >
-        {/* no drag handle - centered layout */}
-
         {/* Header */}
         <div
           style={{
@@ -209,7 +240,6 @@ function PopupForm({ onClose }) {
             </div>
           ) : (
             <form onSubmit={submit}>
-              {/* Name + Phone in a row on larger, stacked on small */}
               <div
                 style={{
                   display: "grid",
@@ -268,6 +298,7 @@ function PopupForm({ onClose }) {
               </div>
               <button
                 type="submit"
+                disabled={submitting}
                 style={{
                   width: "100%",
                   background: "linear-gradient(135deg,#c0392b,#e74c3c)",
@@ -277,7 +308,8 @@ function PopupForm({ onClose }) {
                   padding: "11px",
                   fontWeight: 700,
                   fontSize: 14,
-                  cursor: "pointer",
+                  cursor: submitting ? "not-allowed" : "pointer",
+                  opacity: submitting ? 0.6 : 1,
                   fontFamily: "inherit",
                   display: "flex",
                   alignItems: "center",
@@ -285,7 +317,7 @@ function PopupForm({ onClose }) {
                   gap: 8,
                 }}
               >
-                📲 Submit Request
+                {submitting ? "Submitting..." : "📲 Submit Request"}
               </button>
               <p
                 style={{
@@ -350,16 +382,33 @@ export default function LastCare() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
   };
-  const handleContact = (e) => {
+
+  // ✅ CHANGE 4: Contact form submit - backend par bhejta hai, success par conversion fire
+  const handleContact = async (e) => {
     e.preventDefault();
-    alert("Thank you! We will contact you shortly.");
-    setContactForm({
-      name: "",
-      phone: "",
-      email: "",
-      location: "",
-      message: "",
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactForm),
+      });
+      const result = await res.json();
+      if (result.success) {
+        trackLeadConversion();
+        alert("Thank you! We will contact you shortly.");
+        setContactForm({
+          name: "",
+          phone: "",
+          email: "",
+          location: "",
+          message: "",
+        });
+      } else {
+        alert(result.message || "Something went wrong.");
+      }
+    } catch {
+      alert("Failed to submit. Please call +91 9999741394.");
+    }
   };
 
   const services = [
@@ -1480,7 +1529,7 @@ export default function LastCare() {
               <span style={{ color: "#1565c0" }}>All of Greater Noida</span>
             </h2>
             <p style={{ color: "#6b7280", fontSize: 15, marginTop: 10 }}>
-              Full coverage across Greater Noida, Greater Greater Noida &
+              Full coverage across Greater Noida, Greater Noida West &
               Greater Noida Extension
             </p>
           </div>
